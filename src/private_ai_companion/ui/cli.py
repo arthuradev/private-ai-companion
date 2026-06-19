@@ -124,6 +124,39 @@ class RichCliApp:
         finally:
             await self._application.stop(reason="cli_screen_context_finished")
 
+    async def run_desktop_action(
+        self,
+        *,
+        action_type: str,
+        parameters: dict[str, str],
+        user_confirmed: bool,
+        dry_run_only: bool,
+    ) -> int:
+        self._render_startup()
+        await self._application.start()
+        try:
+            result = await self._application.perform_desktop_action(
+                action_type=action_type,
+                parameters=parameters,
+                user_confirmed=user_confirmed,
+                dry_run_only=dry_run_only,
+            )
+            self._console.print(
+                "[bold cyan]Acao desktop:[/bold cyan] "
+                f"{result.status.value} ({result.risk.value})"
+            )
+            self._console.print(f"[bold blue]Mensagem:[/bold blue] {result.message}")
+            if result.dry_run is not None:
+                self._console.print(
+                    f"[bold blue]Dry-run:[/bold blue] {result.dry_run.summary}"
+                )
+            if result.output:
+                for key, value in sorted(result.output.items()):
+                    self._console.print(f"[bold blue]{key}:[/bold blue] {value}")
+            return 0
+        finally:
+            await self._application.stop(reason="cli_desktop_action_finished")
+
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")
         self._console.print(Text(figlet.renderText(PROJECT_NAME), style="bold cyan"))

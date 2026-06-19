@@ -77,3 +77,22 @@ def test_cli_screen_context_renders_temporary_context() -> None:
     assert "Tela: contexto temporario via fake-vision" in output
     assert "Contexto visual fake local" in output
     assert "Redaction: sem achados" in output
+
+
+def test_cli_desktop_action_renders_dry_run() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(
+        cli.run_desktop_action(
+            action_type="desktop.open_allowed_app",
+            parameters={"app_id": "calculator"},
+            user_confirmed=False,
+            dry_run_only=True,
+        )
+    )
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Acao desktop: dry_run (medium)" in output
+    assert "Open allowed app 'Calculator'" in output

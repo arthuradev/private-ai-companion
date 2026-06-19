@@ -1,0 +1,24 @@
+[desktop.actions]
+enabled = true
+executor_id = "safe-local-desktop"
+allowed_action_types = [
+  "desktop.read_active_window_title",
+  "desktop.create_note",
+  "desktop.open_allowed_app",
+]
+require_confirmation_for = ["medium", "high"]
+allow_high_risk = false
+allow_critical_risk = false
+
+[desktop.notes]
+enabled = true
+directory = "data/notes"
+max_note_bytes = 4096
+
+[desktop.window]
+active_window_title_enabled = true
+fake_active_window_title = "Private AI Companion"
+
+[desktop.allowed_apps]
+calculator = "Calculator"
+notepad = "Notepad"

@@ -9,6 +9,7 @@ FORBIDDEN_CORE_IMPORT_PREFIXES = (
     "private_ai_companion.adapters",
     "private_ai_companion.avatar",
     "private_ai_companion.desktop",
+    "private_ai_companion.safety",
     "private_ai_companion.speech",
     "private_ai_companion.ui",
     "private_ai_companion.vision",
@@ -39,6 +40,7 @@ FORBIDDEN_CONFIG_IMPORT_PREFIXES = (
     "private_ai_companion.adapters",
     "private_ai_companion.avatar",
     "private_ai_companion.desktop",
+    "private_ai_companion.safety",
     "private_ai_companion.speech",
     "private_ai_companion.ui",
     "private_ai_companion.vision",
@@ -83,6 +85,29 @@ FORBIDDEN_VISION_IMPORT_PREFIXES = (
     "private_ai_companion.skills",
     "private_ai_companion.speech",
     "private_ai_companion.ui",
+)
+
+FORBIDDEN_SAFETY_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
+    "private_ai_companion.avatar",
+    "private_ai_companion.brain",
+    "private_ai_companion.desktop",
+    "private_ai_companion.memory",
+    "private_ai_companion.skills",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
+)
+
+FORBIDDEN_DESKTOP_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
+    "private_ai_companion.avatar",
+    "private_ai_companion.brain",
+    "private_ai_companion.memory",
+    "private_ai_companion.skills",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
 )
 
 
@@ -166,6 +191,24 @@ def test_vision_does_not_import_runtime_edges_or_brain() -> None:
     violations = forbidden_imports_under(
         PACKAGE_ROOT / "vision",
         FORBIDDEN_VISION_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_safety_does_not_import_runtime_edges_or_desktop() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "safety",
+        FORBIDDEN_SAFETY_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_desktop_uses_safety_without_runtime_edges() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "desktop",
+        FORBIDDEN_DESKTOP_IMPORT_PREFIXES,
     )
 
     assert violations == {}

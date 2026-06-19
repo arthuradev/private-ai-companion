@@ -165,3 +165,38 @@ class VisionAnalysisReady(BaseEvent):
     status: str = "ready"
     label_count: int = 0
     redacted: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class ActionIntentCreated(BaseEvent):
+    action_id: str = ""
+    action_type: str = ""
+    source: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class PermissionRequired(BaseEvent):
+    action_id: str = ""
+    action_type: str = ""
+    risk: str = ""
+    reason: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class ActionExecuted(BaseEvent):
+    action_id: str = ""
+    action_type: str = ""
+    risk: str = ""
+    status: str = ""
+    executor_id: str = ""
+    dry_run: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class AuditEventCreated(BaseEvent):
+    audit_id: str = ""
+    action_id: str = ""
+    action_type: str = ""
+    risk: str = ""
+    decision: str = ""
+    outcome: str = ""

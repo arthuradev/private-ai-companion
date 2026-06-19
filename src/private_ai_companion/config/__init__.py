@@ -8,6 +8,16 @@ from private_ai_companion.config.avatar_config import (
     VTubeStudioConfig,
     load_avatar_config,
 )
+from private_ai_companion.config.desktop_config import (
+    DEFAULT_DESKTOP_CONFIG_PATH,
+    DesktopActionsConfig,
+    DesktopConfig,
+    DesktopConfigError,
+    DesktopNotesConfig,
+    DesktopWindowConfig,
+    default_desktop_config,
+    load_desktop_config,
+)
 from private_ai_companion.config.errors import ConfigError, PersonaConfigError
 from private_ai_companion.config.memory_config import (
     DEFAULT_MEMORY_CONFIG_PATH,
@@ -51,6 +61,7 @@ from private_ai_companion.config.speech_config import (
 
 __all__ = [
     "DEFAULT_AVATAR_CONFIG_PATH",
+    "DEFAULT_DESKTOP_CONFIG_PATH",
     "DEFAULT_MEMORY_CONFIG_PATH",
     "DEFAULT_PERSONA_CONFIG_PATH",
     "DEFAULT_PRIVACY_CONFIG_PATH",
@@ -62,6 +73,11 @@ __all__ = [
     "AvatarIdleConfig",
     "AvatarLipsyncConfig",
     "ConfigError",
+    "DesktopActionsConfig",
+    "DesktopConfig",
+    "DesktopConfigError",
+    "DesktopNotesConfig",
+    "DesktopWindowConfig",
     "LLMProviderConfig",
     "LLMRouterConfig",
     "MemoryConfig",
@@ -82,8 +98,10 @@ __all__ = [
     "TTSConfig",
     "VTubeStudioConfig",
     "VisionProviderConfig",
+    "default_desktop_config",
     "default_privacy_config",
     "load_avatar_config",
+    "load_desktop_config",
     "load_memory_config",
     "load_persona_profile",
     "load_privacy_config",

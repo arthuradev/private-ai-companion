@@ -9,6 +9,7 @@ from private_ai_companion.adapters.avatar import (
     FakeAvatarProvider,
     VTubeStudioAvatarProvider,
 )
+from private_ai_companion.adapters.desktop import SafeLocalDesktopExecutor
 from private_ai_companion.adapters.llm import FakeLLMProvider
 from private_ai_companion.adapters.speech import (
     EnergyVoiceActivityDetector,
@@ -33,10 +34,12 @@ from private_ai_companion.brain import LLMProvider, LLMProviderKind, LLMRouter
 from private_ai_companion.config import (
     AvatarConfig,
     ConfigError,
+    DesktopConfig,
     LLMProviderConfig,
     PrivacyConfig,
     SpeechConfig,
     load_avatar_config,
+    load_desktop_config,
     load_persona_profile,
     load_privacy_config,
     load_providers_config,
@@ -46,9 +49,20 @@ from private_ai_companion.core.event_bus import EventBus
 from private_ai_companion.core.lifecycle import ApplicationIdentity
 from private_ai_companion.core.orchestrator import CoreOrchestrator
 from private_ai_companion.core.runtime_state import RuntimeStateStore
+from private_ai_companion.desktop import (
+    DesktopActionExecutor,
+    DesktopActionService,
+    DesktopPermissionPolicy,
+)
 from private_ai_companion.interaction import (
     TextInteractionService,
     VoiceInteractionService,
+)
+from private_ai_companion.safety import (
+    ActionPolicy,
+    InMemoryActionAuditLog,
+    RiskClassifier,
+    RiskLevel,
 )
 from private_ai_companion.speech import (
     AudioPlayer,
@@ -77,6 +91,7 @@ class ApplicationConfigPaths:
     speech: Path | None = None
     avatar: Path | None = None
     privacy: Path | None = None
+    desktop: Path | None = None
 
 
 def create_application(
@@ -93,6 +108,7 @@ def create_application(
     speech_config = load_speech_config(paths.speech)
     avatar_config = load_avatar_config(paths.avatar)
     privacy_config = load_privacy_config(paths.privacy)
+    desktop_config = load_desktop_config(paths.desktop)
     providers = _build_llm_providers(providers_config.llm.enabled_providers)
     llm_router = LLMRouter(
         providers=providers,
@@ -147,6 +163,14 @@ def create_application(
         vision_provider=_build_vision_provider(privacy_config),
         policy=_build_screen_capture_policy(privacy_config),
     )
+    desktop_actions = DesktopActionService(
+        event_bus=event_bus,
+        executor=_build_desktop_action_executor(desktop_config),
+        risk_classifier=RiskClassifier(),
+        action_policy=_build_action_policy(desktop_config),
+        permission_policy=_build_desktop_permission_policy(desktop_config),
+        audit_log=InMemoryActionAuditLog(),
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
@@ -156,6 +180,7 @@ def create_application(
         voice_interaction=voice_interaction,
         avatar=avatar,
         vision=vision,
+        desktop_actions=desktop_actions,
     )
 
 
@@ -304,4 +329,54 @@ def _build_screen_capture_policy(
             privacy_config.screen_capture.persist_screenshots_by_default
         ),
         allow_external_analysis=privacy_config.screen_capture.allow_external_analysis,
+    )
+
+
+def _build_desktop_action_executor(
+    desktop_config: DesktopConfig,
+) -> DesktopActionExecutor:
+    if desktop_config.actions.executor_id == "safe-local-desktop":
+        return SafeLocalDesktopExecutor(
+            notes_directory=Path(desktop_config.notes.directory),
+            allowed_apps=dict(desktop_config.allowed_apps),
+            fake_active_window_title=desktop_config.window.fake_active_window_title,
+            max_note_bytes=desktop_config.notes.max_note_bytes,
+        )
+
+    raise ConfigError(
+        "Only safe-local-desktop is executable in Phase 11; "
+        f"executor {desktop_config.actions.executor_id!r} is not implemented"
+    )
+
+
+def _build_action_policy(desktop_config: DesktopConfig) -> ActionPolicy:
+    allowed_action_types = (
+        desktop_config.actions.allowed_action_types
+        if desktop_config.actions.enabled
+        else ()
+    )
+    return ActionPolicy(
+        allowed_action_types=allowed_action_types,
+        require_confirmation_for=tuple(
+            RiskLevel(level)
+            for level in desktop_config.actions.require_confirmation_for
+        ),
+        allow_high_risk=desktop_config.actions.allow_high_risk,
+        allow_critical_risk=desktop_config.actions.allow_critical_risk,
+    )
+
+
+def _build_desktop_permission_policy(
+    desktop_config: DesktopConfig,
+) -> DesktopPermissionPolicy:
+    allowed_action_types = (
+        desktop_config.actions.allowed_action_types
+        if desktop_config.actions.enabled
+        else ()
+    )
+    return DesktopPermissionPolicy(
+        allowed_action_types=allowed_action_types,
+        allowed_app_ids=tuple(desktop_config.allowed_apps),
+        notes_enabled=desktop_config.notes.enabled,
+        active_window_title_enabled=desktop_config.window.active_window_title_enabled,
     )

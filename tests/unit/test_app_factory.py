@@ -6,6 +6,7 @@ from pathlib import Path
 from private_ai_companion.avatar import AvatarExpression, AvatarProviderStatus
 from private_ai_companion.bootstrap import Application, create_application
 from private_ai_companion.core import RuntimePhase
+from private_ai_companion.safety import ActionExecutionStatus
 
 
 def test_create_application_wires_core_runtime() -> None:
@@ -18,6 +19,7 @@ def test_create_application_wires_core_runtime() -> None:
     assert application.avatar.provider_id == "fake-avatar"
     assert application.vision.capture_provider_id == "fake-screen-capture"
     assert application.vision.vision_provider_id == "fake-vision"
+    assert application.desktop_actions.executor_id == "safe-local-desktop"
 
     snapshot = asyncio.run(application.run_once())
 
@@ -58,3 +60,17 @@ def test_application_requests_authorized_screen_context() -> None:
 
     assert context.provider_id == "fake-vision"
     assert context.transient is True
+
+
+def test_application_performs_confirmed_desktop_action() -> None:
+    application = create_application(name="test-app", version="0.0.0")
+
+    result = asyncio.run(
+        application.perform_desktop_action(
+            action_type="desktop.read_active_window_title",
+            user_confirmed=True,
+        )
+    )
+
+    assert result.status is ActionExecutionStatus.EXECUTED
+    assert result.output["title"] == "Private AI Companion"

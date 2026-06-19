@@ -1,15 +1,19 @@
 from private_ai_companion.core.event_bus import EventBus, EventHandler, Subscription
 from private_ai_companion.core.events import (
+    ActionExecuted,
+    ActionIntentCreated,
     AppStarted,
     AppStopped,
     AppStopping,
     AssistantTextReady,
+    AuditEventCreated,
     AvatarLipsyncUpdated,
     AvatarStateApplied,
     AvatarStateRequested,
     BaseEvent,
     EventMetadata,
     EventSensitivity,
+    PermissionRequired,
     ScreenContextCaptured,
     ScreenContextDenied,
     ScreenContextRedacted,
@@ -34,11 +38,14 @@ from private_ai_companion.core.runtime_state import (
 )
 
 __all__ = [
+    "ActionExecuted",
+    "ActionIntentCreated",
     "AppStarted",
     "AppStopped",
     "AppStopping",
     "ApplicationIdentity",
     "AssistantTextReady",
+    "AuditEventCreated",
     "AvatarLipsyncUpdated",
     "AvatarStateApplied",
     "AvatarStateRequested",
@@ -49,6 +56,7 @@ __all__ = [
     "EventMetadata",
     "EventSensitivity",
     "LifecycleManager",
+    "PermissionRequired",
     "RuntimePhase",
     "RuntimeSnapshot",
     "RuntimeState",

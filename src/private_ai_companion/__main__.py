@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -9,6 +9,12 @@ from private_ai_companion import PROJECT_NAME, __version__
 from private_ai_companion.avatar import AvatarExpression
 from private_ai_companion.bootstrap import ApplicationConfigPaths, create_application
 from private_ai_companion.ui import RichCliApp
+
+DESKTOP_ACTION_CLI_MAP = {
+    "read-active-window-title": "desktop.read_active_window_title",
+    "create-note": "desktop.create_note",
+    "open-allowed-app": "desktop.open_allowed_app",
+}
 
 
 def build_parser() -> ArgumentParser:
@@ -57,6 +63,11 @@ def build_parser() -> ArgumentParser:
         help="path to a privacy TOML config file",
     )
     parser.add_argument(
+        "--desktop-config",
+        type=Path,
+        help="path to a desktop actions TOML config file",
+    )
+    parser.add_argument(
         "--avatar-expression",
         choices=[expression.value for expression in AvatarExpression],
         help="apply one avatar expression and exit",
@@ -70,6 +81,34 @@ def build_parser() -> ArgumentParser:
         "--screen-purpose",
         default="manual_cli_screen_context",
         help="short purpose attached to an explicit screen context request",
+    )
+    parser.add_argument(
+        "--desktop-action",
+        choices=sorted(DESKTOP_ACTION_CLI_MAP),
+        help="run one safe desktop action through policy and exit",
+    )
+    parser.add_argument(
+        "--desktop-confirm",
+        action="store_true",
+        help="confirm one policy-gated desktop action",
+    )
+    parser.add_argument(
+        "--desktop-dry-run",
+        action="store_true",
+        help="show the desktop action dry-run without executing it",
+    )
+    parser.add_argument(
+        "--note-title",
+        help="title for --desktop-action create-note",
+    )
+    parser.add_argument(
+        "--note-body",
+        default="",
+        help="body for --desktop-action create-note",
+    )
+    parser.add_argument(
+        "--app-id",
+        help="allowlisted app id for --desktop-action open-allowed-app",
     )
     return parser
 
@@ -88,13 +127,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             options.voice_file is not None,
             options.avatar_expression is not None,
             bool(options.screen_context),
+            options.desktop_action is not None,
         )
     )
     if single_action_count > 1:
         parser.error(
-            "--once, --voice-file, --avatar-expression and --screen-context "
-            "are exclusive"
+            "--once, --voice-file, --avatar-expression, --screen-context and "
+            "--desktop-action are exclusive"
         )
+
+    if options.desktop_action == "create-note" and not options.note_title:
+        parser.error("--desktop-action create-note requires --note-title")
+    if options.desktop_action == "open-allowed-app" and not options.app_id:
+        parser.error("--desktop-action open-allowed-app requires --app-id")
 
     cli = RichCliApp(
         application=create_application(
@@ -104,9 +149,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 speech=options.speech_config,
                 avatar=options.avatar_config,
                 privacy=options.privacy_config,
+                desktop=options.desktop_config,
             ),
         )
     )
+    return _run_cli_action(cli, options)
+
+
+def _run_cli_action(cli: RichCliApp, options: Namespace) -> int:
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
     if options.voice_file is not None:
@@ -117,6 +167,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     if options.screen_context:
         return asyncio.run(cli.run_screen_context(str(options.screen_purpose)))
+    if options.desktop_action is not None:
+        parameters: dict[str, str] = {}
+        if options.desktop_action == "create-note":
+            parameters = {
+                "title": str(options.note_title),
+                "body": str(options.note_body),
+            }
+        elif options.desktop_action == "open-allowed-app":
+            parameters = {"app_id": str(options.app_id)}
+        return asyncio.run(
+            cli.run_desktop_action(
+                action_type=DESKTOP_ACTION_CLI_MAP[str(options.desktop_action)],
+                parameters=parameters,
+                user_confirmed=bool(options.desktop_confirm),
+                dry_run_only=bool(options.desktop_dry_run),
+            )
+        )
 
     return asyncio.run(cli.run_interactive())
 

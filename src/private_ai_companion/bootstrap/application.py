@@ -10,6 +10,11 @@ from private_ai_companion.avatar import (
 )
 from private_ai_companion.brain import LLMRouter, PersonaProfile
 from private_ai_companion.core.orchestrator import CoreOrchestrator, RuntimeSnapshot
+from private_ai_companion.desktop import (
+    DesktopActionRequest,
+    DesktopActionResult,
+    DesktopActionService,
+)
 from private_ai_companion.interaction import (
     TextInteractionService,
     TextTurn,
@@ -34,6 +39,7 @@ class Application:
     voice_interaction: VoiceInteractionService
     avatar: AvatarService
     vision: VisionService
+    desktop_actions: DesktopActionService
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()
@@ -78,5 +84,24 @@ class Application:
                 user_authorized=user_authorized,
                 allow_persistence=allow_persistence,
                 allow_external_analysis=allow_external_analysis,
+            )
+        )
+
+    async def perform_desktop_action(
+        self,
+        *,
+        action_type: str,
+        parameters: dict[str, str] | None = None,
+        user_confirmed: bool = False,
+        dry_run_only: bool = False,
+        source: str = "manual_cli_request",
+    ) -> DesktopActionResult:
+        return await self.desktop_actions.perform(
+            DesktopActionRequest(
+                action_type=action_type,
+                parameters=parameters or {},
+                source=source,
+                user_confirmed=user_confirmed,
+                dry_run_only=dry_run_only,
             )
         )

@@ -65,6 +65,27 @@ def test_entrypoint_screen_context_returns_success(
     assert "Contexto visual fake local" in captured.out
 
 
+def test_entrypoint_desktop_action_dry_run_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert (
+        main(
+            (
+                "--desktop-action",
+                "open-allowed-app",
+                "--app-id",
+                "calculator",
+                "--desktop-dry-run",
+            )
+        )
+        == 0
+    )
+
+    captured = capsys.readouterr()
+    assert "Acao desktop: dry_run (medium)" in captured.out
+    assert "Open allowed app 'Calculator'" in captured.out
+
+
 def test_entrypoint_rejects_multiple_single_actions(tmp_path: Path) -> None:
     voice_file = tmp_path / "voice.txt"
     voice_file.write_text("hello voice", encoding="utf-8")
@@ -85,5 +106,19 @@ def test_entrypoint_rejects_multiple_single_actions(tmp_path: Path) -> None:
 def test_entrypoint_rejects_text_and_screen_context_together() -> None:
     with pytest.raises(SystemExit) as error:
         main(("--once", "hello", "--screen-context"))
+
+    assert error.value.code == 2
+
+
+def test_entrypoint_rejects_text_and_desktop_action_together() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--once", "hello", "--desktop-action", "read-active-window-title"))
+
+    assert error.value.code == 2
+
+
+def test_entrypoint_rejects_create_note_without_title() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--desktop-action", "create-note"))
 
     assert error.value.code == 2
