@@ -11,6 +11,10 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Plano de fases para implementação pelo Codex.
 - Políticas iniciais de segurança, privacidade, memória e ações.
 - ADRs iniciais.
+- Fundação Python 3.12+ com `src/`, `uv`, `ruff`, `pytest` e `pyright`.
+- Entry point oficial `private-ai-companion`.
+- `Start.bat` inicial para usuários Windows.
+- Testes iniciais de sanidade e boundary arquitetural.
 
 ### Changed
 

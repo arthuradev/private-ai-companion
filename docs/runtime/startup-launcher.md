@@ -21,7 +21,7 @@ baixar/clonar projeto ou release
 
 ## Responsabilidades do `Start.bat`
 
-O `Start.bat` futuro deve ser tratado como um launcher de bootstrap, não como local de regra de negócio.
+O `Start.bat` deve ser tratado como um launcher de bootstrap, não como local de regra de negócio.
 
 Ele deve:
 
@@ -38,6 +38,21 @@ Ele deve:
 - não conter segredos;
 - não executar comandos destrutivos;
 - falhar com mensagem compreensível e código de saída adequado.
+
+## Estado na Fase 01
+
+O `Start.bat` inicial já existe e executa o fluxo mínimo:
+
+```text
+Start.bat
+→ valida presença de uv
+→ valida Python 3.12 pelo Windows py launcher
+→ chama uv run private-ai-companion
+→ entrypoint definido em pyproject.toml
+```
+
+Nesta fase, o entrypoint apenas confirma que a fundação está instalada. A CLI
+com Rich/Pyfiglet e conversa por texto será implementada na Fase 03.
 
 ## Responsabilidades que não pertencem ao `Start.bat`
 

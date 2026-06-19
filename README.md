@@ -28,9 +28,16 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 6. **Segurança antes de automação**: ações locais passam por classificação de risco, dry-run, confirmação e log quando necessário.
 7. **Fases controladas**: o desenvolvimento ocorre por fases; ao final de cada fase, a IA deve parar e pedir autorização para avançar.
 
-## Estado inicial
+## Estado atual
 
-Este repositório começa como uma base documental. O código do produto será implementado posteriormente por uma IA de desenvolvimento, especialmente o Codex, seguindo os documentos deste projeto.
+Este repositório já possui a fundação Python inicial da Fase 01:
+
+- projeto Python 3.12+ com `src/`;
+- `uv`, `ruff`, `pytest` e `pyright` configurados;
+- pacote `private_ai_companion`;
+- entrypoint oficial `private-ai-companion`;
+- `Start.bat` inicial para usuários Windows;
+- testes de sanidade e boundary arquitetural inicial.
 
 Ordem de leitura recomendada:
 
@@ -57,6 +64,35 @@ Ordem de leitura recomendada:
 - VTube Studio + Live2D como primeiro caminho real de avatar
 - LLM router híbrido com providers locais/cloud
 
+## Como executar
+
+### Usuário Windows
+
+Execute:
+
+```text
+Start.bat
+```
+
+O launcher valida `uv` e Python 3.12 pelo Windows `py` launcher, então chama o
+entrypoint oficial do pacote Python.
+
+### Desenvolvimento
+
+```text
+uv sync
+uv run private-ai-companion
+```
+
+Validações da Fase 01:
+
+```text
+uv run ruff format --check
+uv run ruff check
+uv run pytest
+uv run pyright
+```
+
 ## Documentação principal
 
 - `SDD.md`: especificação do produto.
@@ -76,15 +112,15 @@ Apache License 2.0. Consulte `LICENSE.md`.
 
 ## Inicialização para usuário final
 
-O projeto deve ser implementado com um fluxo amigável de inicialização no Windows. O usuário final não deve ser obrigado a conhecer comandos técnicos para abrir a companion.
+O projeto mantém um fluxo amigável de inicialização no Windows. O usuário final não deve ser obrigado a conhecer comandos técnicos para abrir a companion.
 
-Quando o código for implementado, o caminho recomendado será:
+Na Fase 01, o caminho recomendado já é:
 
 ```text
 Start.bat
 → valida ambiente
-→ prepara dependências quando necessário
-→ inicia private-ai-companion com Rich + Pyfiglet
+→ prepara dependências pelo uv quando necessário
+→ inicia o entrypoint oficial private-ai-companion
 ```
 
-Comandos técnicos continuarão disponíveis para desenvolvedores, mas o `Start.bat` deve ser tratado como o entrypoint principal de uso no Windows.
+Comandos técnicos continuam disponíveis para desenvolvedores. A CLI com Rich/Pyfiglet será implementada na Fase 03, mantendo o `Start.bat` como entrypoint principal de uso no Windows.
