@@ -8,3 +8,19 @@ enabled = true
 [speech.playback]
 enabled = false
 interrupt_on_new_input = true
+
+[speech.stt]
+provider_id = "fake-stt"
+language = "pt-BR"
+model_size = "base"
+device = "cpu"
+compute_type = "int8"
+vad_filter = true
+enabled = true
+
+[speech.input]
+mode = "push-to-talk"
+microphone_enabled = false
+vad_enabled = true
+vad_threshold = 0.01
+max_record_seconds = 30.0

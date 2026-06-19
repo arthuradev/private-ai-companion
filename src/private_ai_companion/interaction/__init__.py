@@ -6,6 +6,7 @@ from private_ai_companion.interaction.text import (
     TextTurn,
     UserTextMessage,
 )
+from private_ai_companion.interaction.voice import VoiceInteractionService, VoiceTurn
 
 __all__ = [
     "AssistantTextMessage",
@@ -14,4 +15,6 @@ __all__ = [
     "TextResponder",
     "TextTurn",
     "UserTextMessage",
+    "VoiceInteractionService",
+    "VoiceTurn",
 ]

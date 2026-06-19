@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 
 from private_ai_companion.bootstrap import Application, create_application
 from private_ai_companion.core import RuntimePhase
@@ -17,3 +18,16 @@ def test_create_application_wires_core_runtime() -> None:
     snapshot = asyncio.run(application.run_once())
 
     assert snapshot.state.phase is RuntimePhase.STOPPED
+
+
+def test_application_handles_explicit_voice_file(tmp_path: Path) -> None:
+    voice_file = tmp_path / "voice.txt"
+    voice_file.write_text("hello through speech", encoding="utf-8")
+    application = create_application(name="test-app", version="0.0.0")
+
+    turn = asyncio.run(application.handle_user_voice_file(voice_file))
+
+    assert turn.voice.transcript is not None
+    assert turn.voice.transcript.text == "hello through speech"
+    assert turn.text is not None
+    assert turn.text.user.text == "hello through speech"

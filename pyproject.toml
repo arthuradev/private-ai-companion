@@ -23,6 +23,11 @@ dependencies = [
     "rich>=15.0.0",
 ]
 
+[project.optional-dependencies]
+stt = [
+    "faster-whisper>=1.1.0",
+]
+
 [project.scripts]
 private-ai-companion = "private_ai_companion.__main__:main"
 

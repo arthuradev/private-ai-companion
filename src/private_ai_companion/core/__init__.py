@@ -11,7 +11,11 @@ from private_ai_companion.core.events import (
     SpeechInterrupted,
     SpeechStarted,
     TTSRequested,
+    UserSpeechReceived,
     UserTextReceived,
+    VoiceInputFinished,
+    VoiceInputIgnored,
+    VoiceInputStarted,
 )
 from private_ai_companion.core.lifecycle import ApplicationIdentity, LifecycleManager
 from private_ai_companion.core.orchestrator import CoreOrchestrator, RuntimeSnapshot
@@ -43,5 +47,9 @@ __all__ = [
     "SpeechStarted",
     "Subscription",
     "TTSRequested",
+    "UserSpeechReceived",
     "UserTextReceived",
+    "VoiceInputFinished",
+    "VoiceInputIgnored",
+    "VoiceInputStarted",
 ]

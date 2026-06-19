@@ -1,21 +1,56 @@
-from private_ai_companion.speech.errors import PlaybackError, SpeechError, TTSError
+from private_ai_companion.speech.errors import (
+    PlaybackError,
+    SpeechError,
+    STTError,
+    TTSError,
+    VoiceInputError,
+)
+from private_ai_companion.speech.input import VoiceInputService, VoiceInputSettings
 from private_ai_companion.speech.models import (
     SpeechAudio,
     SpeechAudioFormat,
+    SpeechInputAudio,
+    SpeechInputAudioFormat,
+    SpeechInputMode,
+    SpeechInputSource,
+    SpeechInputStatus,
     SpeechInterruptResult,
     SpeechQueueItem,
     SpeechQueueStatus,
+    STTRequest,
+    STTResult,
+    STTSegment,
     TTSRequest,
+    VoiceActivityResult,
+    VoiceInputResult,
+    infer_speech_input_audio_format,
 )
-from private_ai_companion.speech.ports import AudioPlayer, TTSProvider
+from private_ai_companion.speech.ports import (
+    AudioPlayer,
+    PushToTalkRecorder,
+    STTProvider,
+    TTSProvider,
+    VoiceActivityDetector,
+)
 from private_ai_companion.speech.queue import SpeechQueueService
 
 __all__ = [
     "AudioPlayer",
     "PlaybackError",
+    "PushToTalkRecorder",
+    "STTError",
+    "STTProvider",
+    "STTRequest",
+    "STTResult",
+    "STTSegment",
     "SpeechAudio",
     "SpeechAudioFormat",
     "SpeechError",
+    "SpeechInputAudio",
+    "SpeechInputAudioFormat",
+    "SpeechInputMode",
+    "SpeechInputSource",
+    "SpeechInputStatus",
     "SpeechInterruptResult",
     "SpeechQueueItem",
     "SpeechQueueService",
@@ -23,4 +58,11 @@ __all__ = [
     "TTSError",
     "TTSProvider",
     "TTSRequest",
+    "VoiceActivityDetector",
+    "VoiceActivityResult",
+    "VoiceInputError",
+    "VoiceInputResult",
+    "VoiceInputService",
+    "VoiceInputSettings",
+    "infer_speech_input_audio_format",
 ]

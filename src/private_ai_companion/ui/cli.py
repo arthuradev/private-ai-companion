@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from pathlib import Path
 
 from pyfiglet import Figlet
 from rich.console import Console
@@ -63,6 +64,30 @@ class RichCliApp:
             return 0
         finally:
             await self._application.stop(reason="cli_single_turn_finished")
+
+    async def run_voice_file(self, path: Path) -> int:
+        self._render_startup()
+        await self._application.start()
+        try:
+            turn = await self._application.handle_user_voice_file(path)
+            if turn.text is None:
+                self._console.print(
+                    "[yellow]Entrada de voz ignorada: "
+                    f"{turn.voice.ignored_reason or 'sem transcricao'}[/yellow]"
+                )
+                return 0
+
+            self._console.print(
+                "[bold blue]Voz transcrita:[/bold blue] "
+                f"{turn.voice.transcript.text if turn.voice.transcript else ''}"
+            )
+            self._console.print(
+                f"[bold magenta]{self._application.persona.display_name}:"
+                f"[/bold magenta] {turn.text.assistant.text}"
+            )
+            return 0
+        finally:
+            await self._application.stop(reason="cli_voice_file_finished")
 
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")

@@ -53,8 +53,32 @@ class UserTextReceived(BaseEvent):
 
 
 @dataclass(frozen=True, slots=True)
+class UserSpeechReceived(BaseEvent):
+    text: str = ""
+    language: str | None = None
+    confidence: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class AssistantTextReady(BaseEvent):
     text: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class VoiceInputStarted(BaseEvent):
+    mode: str = "push-to-talk"
+
+
+@dataclass(frozen=True, slots=True)
+class VoiceInputFinished(BaseEvent):
+    status: str = "transcribed"
+    transcript_id: str | None = None
+    duration_seconds: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class VoiceInputIgnored(BaseEvent):
+    reason: str = "ignored"
 
 
 @dataclass(frozen=True, slots=True)

@@ -26,6 +26,11 @@ def build_parser() -> ArgumentParser:
         help="send one text message through the CLI and exit",
     )
     parser.add_argument(
+        "--voice-file",
+        type=Path,
+        help="transcribe one explicit audio file and send it as one user message",
+    )
+    parser.add_argument(
         "--persona-config",
         type=Path,
         help="path to a persona TOML config file",
@@ -51,6 +56,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"{PROJECT_NAME} {__version__}")
         return 0
 
+    if options.once is not None and options.voice_file is not None:
+        parser.error("--once and --voice-file cannot be used together")
+
     cli = RichCliApp(
         application=create_application(
             persona_config_path=options.persona_config,
@@ -60,6 +68,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
+    if options.voice_file is not None:
+        return asyncio.run(cli.run_voice_file(Path(options.voice_file)))
 
     return asyncio.run(cli.run_interactive())
 

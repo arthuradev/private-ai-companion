@@ -4,7 +4,13 @@ from pathlib import Path
 
 from private_ai_companion import PROJECT_NAME, __version__
 from private_ai_companion.adapters.llm import FakeLLMProvider
-from private_ai_companion.adapters.speech import FakeAudioPlayer, FakeTTSProvider
+from private_ai_companion.adapters.speech import (
+    EnergyVoiceActivityDetector,
+    FakeAudioPlayer,
+    FakeSTTProvider,
+    FakeTTSProvider,
+    FasterWhisperSTTProvider,
+)
 from private_ai_companion.bootstrap.application import Application
 from private_ai_companion.brain import LLMProvider, LLMProviderKind, LLMRouter
 from private_ai_companion.config import (
@@ -19,12 +25,20 @@ from private_ai_companion.core.event_bus import EventBus
 from private_ai_companion.core.lifecycle import ApplicationIdentity
 from private_ai_companion.core.orchestrator import CoreOrchestrator
 from private_ai_companion.core.runtime_state import RuntimeStateStore
-from private_ai_companion.interaction import TextInteractionService
+from private_ai_companion.interaction import (
+    TextInteractionService,
+    VoiceInteractionService,
+)
 from private_ai_companion.speech import (
     AudioPlayer,
     SpeechAudioFormat,
+    SpeechInputMode,
     SpeechQueueService,
+    STTProvider,
     TTSProvider,
+    VoiceActivityDetector,
+    VoiceInputService,
+    VoiceInputSettings,
 )
 
 
@@ -63,12 +77,28 @@ def create_application(
         tts_provider=_build_tts_provider(speech_config),
         audio_player=_build_audio_player(speech_config),
     )
+    voice_input = VoiceInputService(
+        event_bus=event_bus,
+        stt_provider=_build_stt_provider(speech_config),
+        voice_activity_detector=_build_voice_activity_detector(speech_config),
+        settings=VoiceInputSettings(
+            language=speech_config.stt.language,
+            default_mode=SpeechInputMode(speech_config.input.mode),
+            vad_enabled=speech_config.input.vad_enabled,
+            enabled=speech_config.stt.enabled,
+        ),
+    )
+    voice_interaction = VoiceInteractionService(
+        voice_input=voice_input,
+        text_interaction=text_interaction,
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
         persona=persona,
         llm_router=llm_router,
         speech_queue=speech_queue,
+        voice_interaction=voice_interaction,
     )
 
 
@@ -110,3 +140,28 @@ def _build_tts_provider(speech_config: SpeechConfig) -> TTSProvider:
 def _build_audio_player(speech_config: SpeechConfig) -> AudioPlayer:
     _ = speech_config
     return FakeAudioPlayer()
+
+
+def _build_stt_provider(speech_config: SpeechConfig) -> STTProvider:
+    if speech_config.stt.provider_id == "fake-stt":
+        return FakeSTTProvider()
+
+    if speech_config.stt.provider_id == "faster-whisper":
+        return FasterWhisperSTTProvider(
+            provider_id=speech_config.stt.provider_id,
+            model_size=speech_config.stt.model_size,
+            device=speech_config.stt.device,
+            compute_type=speech_config.stt.compute_type,
+            vad_filter=speech_config.stt.vad_filter,
+        )
+
+    raise ConfigError(
+        "Only fake-stt and faster-whisper STT are executable in Phase 08; "
+        f"provider {speech_config.stt.provider_id!r} is not implemented"
+    )
+
+
+def _build_voice_activity_detector(
+    speech_config: SpeechConfig,
+) -> VoiceActivityDetector:
+    return EnergyVoiceActivityDetector(threshold=speech_config.input.vad_threshold)
