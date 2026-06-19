@@ -1,0 +1,33 @@
+[avatar]
+provider_id = "fake-avatar"
+enabled = true
+
+[avatar.vtube_studio]
+host = "localhost"
+port = 8001
+plugin_name = "private-ai-companion"
+plugin_developer = "private-ai-companion"
+authentication_token_env = "PRIVATE_AI_COMPANION_VTS_TOKEN"
+request_token_on_connect = false
+
+[avatar.expression_hotkeys]
+idle = ""
+listening = ""
+thinking = ""
+speaking = ""
+interrupted = ""
+happy = ""
+curious = ""
+concerned = ""
+confused = ""
+neutral = ""
+
+[avatar.idle]
+enabled = true
+expression = "idle"
+interval_seconds = 30.0
+
+[avatar.lipsync]
+enabled = true
+parameter_name = "MouthOpen"
+weight = 1.0

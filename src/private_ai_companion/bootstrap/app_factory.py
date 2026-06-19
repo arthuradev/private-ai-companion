@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import os
+from dataclasses import dataclass
 from pathlib import Path
 
 from private_ai_companion import PROJECT_NAME, __version__
+from private_ai_companion.adapters.avatar import (
+    FakeAvatarProvider,
+    VTubeStudioAvatarProvider,
+)
 from private_ai_companion.adapters.llm import FakeLLMProvider
 from private_ai_companion.adapters.speech import (
     EnergyVoiceActivityDetector,
@@ -11,12 +17,21 @@ from private_ai_companion.adapters.speech import (
     FakeTTSProvider,
     FasterWhisperSTTProvider,
 )
+from private_ai_companion.avatar import (
+    AvatarExpression,
+    AvatarIdleState,
+    AvatarProvider,
+    AvatarService,
+    AvatarServiceSettings,
+)
 from private_ai_companion.bootstrap.application import Application
 from private_ai_companion.brain import LLMProvider, LLMProviderKind, LLMRouter
 from private_ai_companion.config import (
+    AvatarConfig,
     ConfigError,
     LLMProviderConfig,
     SpeechConfig,
+    load_avatar_config,
     load_persona_profile,
     load_providers_config,
     load_speech_config,
@@ -42,19 +57,27 @@ from private_ai_companion.speech import (
 )
 
 
+@dataclass(frozen=True, slots=True)
+class ApplicationConfigPaths:
+    persona: Path | None = None
+    providers: Path | None = None
+    speech: Path | None = None
+    avatar: Path | None = None
+
+
 def create_application(
     *,
     name: str = PROJECT_NAME,
     version: str = __version__,
-    persona_config_path: Path | None = None,
-    providers_config_path: Path | None = None,
-    speech_config_path: Path | None = None,
+    config_paths: ApplicationConfigPaths | None = None,
 ) -> Application:
+    paths = config_paths or ApplicationConfigPaths()
     event_bus = EventBus()
     state_store = RuntimeStateStore()
-    persona = load_persona_profile(persona_config_path)
-    providers_config = load_providers_config(providers_config_path)
-    speech_config = load_speech_config(speech_config_path)
+    persona = load_persona_profile(paths.persona)
+    providers_config = load_providers_config(paths.providers)
+    speech_config = load_speech_config(paths.speech)
+    avatar_config = load_avatar_config(paths.avatar)
     providers = _build_llm_providers(providers_config.llm.enabled_providers)
     llm_router = LLMRouter(
         providers=providers,
@@ -92,6 +115,11 @@ def create_application(
         voice_input=voice_input,
         text_interaction=text_interaction,
     )
+    avatar = AvatarService(
+        event_bus=event_bus,
+        provider=_build_avatar_provider(avatar_config),
+        settings=_build_avatar_service_settings(avatar_config),
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
@@ -99,6 +127,7 @@ def create_application(
         llm_router=llm_router,
         speech_queue=speech_queue,
         voice_interaction=voice_interaction,
+        avatar=avatar,
     )
 
 
@@ -165,3 +194,48 @@ def _build_voice_activity_detector(
     speech_config: SpeechConfig,
 ) -> VoiceActivityDetector:
     return EnergyVoiceActivityDetector(threshold=speech_config.input.vad_threshold)
+
+
+def _build_avatar_provider(avatar_config: AvatarConfig) -> AvatarProvider:
+    if avatar_config.provider_id == "fake-avatar":
+        return FakeAvatarProvider()
+
+    if avatar_config.provider_id == "vtube-studio":
+        token = os.environ.get(
+            avatar_config.vtube_studio.authentication_token_env,
+        )
+        return VTubeStudioAvatarProvider(
+            provider_id=avatar_config.provider_id,
+            host=avatar_config.vtube_studio.host,
+            port=avatar_config.vtube_studio.port,
+            plugin_name=avatar_config.vtube_studio.plugin_name,
+            plugin_developer=avatar_config.vtube_studio.plugin_developer,
+            authentication_token=token,
+            request_token_on_connect=(
+                avatar_config.vtube_studio.request_token_on_connect
+            ),
+            expression_hotkeys={
+                AvatarExpression(hotkey.expression): hotkey.hotkey_id
+                for hotkey in avatar_config.expression_hotkeys
+            },
+        )
+
+    raise ConfigError(
+        "Only fake-avatar and vtube-studio avatar providers are executable in "
+        f"Phase 09; provider {avatar_config.provider_id!r} is not implemented"
+    )
+
+
+def _build_avatar_service_settings(
+    avatar_config: AvatarConfig,
+) -> AvatarServiceSettings:
+    return AvatarServiceSettings(
+        enabled=avatar_config.enabled,
+        idle=AvatarIdleState(
+            enabled=avatar_config.idle.enabled,
+            expression=AvatarExpression(avatar_config.idle.expression),
+            interval_seconds=avatar_config.idle.interval_seconds,
+        ),
+        lipsync_parameter_name=avatar_config.lipsync.parameter_name,
+        lipsync_weight=avatar_config.lipsync.weight,
+    )

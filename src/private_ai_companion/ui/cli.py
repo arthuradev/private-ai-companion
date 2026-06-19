@@ -10,6 +10,7 @@ from rich.prompt import Prompt
 from rich.text import Text
 
 from private_ai_companion import PROJECT_NAME
+from private_ai_companion.avatar import AvatarExpression
 from private_ai_companion.bootstrap import Application
 
 InputReader = Callable[[str], str]
@@ -88,6 +89,19 @@ class RichCliApp:
             return 0
         finally:
             await self._application.stop(reason="cli_voice_file_finished")
+
+    async def run_avatar_expression(self, expression: AvatarExpression) -> int:
+        self._render_startup()
+        await self._application.start()
+        try:
+            result = await self._application.set_avatar_expression(expression)
+            self._console.print(
+                "[bold cyan]Avatar:[/bold cyan] "
+                f"{expression.value} via {result.provider_id} ({result.status.value})"
+            )
+            return 0
+        finally:
+            await self._application.stop(reason="cli_avatar_expression_finished")
 
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")

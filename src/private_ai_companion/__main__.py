@@ -6,7 +6,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from private_ai_companion import PROJECT_NAME, __version__
-from private_ai_companion.bootstrap import create_application
+from private_ai_companion.avatar import AvatarExpression
+from private_ai_companion.bootstrap import ApplicationConfigPaths, create_application
 from private_ai_companion.ui import RichCliApp
 
 
@@ -45,6 +46,16 @@ def build_parser() -> ArgumentParser:
         type=Path,
         help="path to a speech TOML config file",
     )
+    parser.add_argument(
+        "--avatar-config",
+        type=Path,
+        help="path to an avatar TOML config file",
+    )
+    parser.add_argument(
+        "--avatar-expression",
+        choices=[expression.value for expression in AvatarExpression],
+        help="apply one avatar expression and exit",
+    )
     return parser
 
 
@@ -56,20 +67,35 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"{PROJECT_NAME} {__version__}")
         return 0
 
-    if options.once is not None and options.voice_file is not None:
-        parser.error("--once and --voice-file cannot be used together")
+    single_action_count = sum(
+        option is not None
+        for option in (
+            options.once,
+            options.voice_file,
+            options.avatar_expression,
+        )
+    )
+    if single_action_count > 1:
+        parser.error("--once, --voice-file and --avatar-expression are exclusive")
 
     cli = RichCliApp(
         application=create_application(
-            persona_config_path=options.persona_config,
-            providers_config_path=options.providers_config,
-            speech_config_path=options.speech_config,
+            config_paths=ApplicationConfigPaths(
+                persona=options.persona_config,
+                providers=options.providers_config,
+                speech=options.speech_config,
+                avatar=options.avatar_config,
+            ),
         )
     )
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
     if options.voice_file is not None:
         return asyncio.run(cli.run_voice_file(Path(options.voice_file)))
+    if options.avatar_expression is not None:
+        return asyncio.run(
+            cli.run_avatar_expression(AvatarExpression(str(options.avatar_expression)))
+        )
 
     return asyncio.run(cli.run_interactive())
 

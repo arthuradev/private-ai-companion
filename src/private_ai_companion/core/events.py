@@ -102,3 +102,24 @@ class SpeechInterrupted(BaseEvent):
     reason: str = "interrupted"
     interrupted_item_id: str | None = None
     cleared_items: int = 0
+
+
+@dataclass(frozen=True, slots=True)
+class AvatarStateRequested(BaseEvent):
+    expression: str = "idle"
+    reason: str = "state_requested"
+    intensity: float = 1.0
+
+
+@dataclass(frozen=True, slots=True)
+class AvatarStateApplied(BaseEvent):
+    expression: str = "idle"
+    provider_id: str = ""
+    status: str = "applied"
+
+
+@dataclass(frozen=True, slots=True)
+class AvatarLipsyncUpdated(BaseEvent):
+    parameter_name: str = ""
+    value: float = 0.0
+    provider_id: str = ""

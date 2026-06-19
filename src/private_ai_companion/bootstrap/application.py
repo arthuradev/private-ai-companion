@@ -3,6 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from private_ai_companion.avatar import (
+    AvatarExpression,
+    AvatarProviderResult,
+    AvatarService,
+)
 from private_ai_companion.brain import LLMRouter, PersonaProfile
 from private_ai_companion.core.orchestrator import CoreOrchestrator, RuntimeSnapshot
 from private_ai_companion.interaction import (
@@ -22,6 +27,7 @@ class Application:
     llm_router: LLMRouter
     speech_queue: SpeechQueueService
     voice_interaction: VoiceInteractionService
+    avatar: AvatarService
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()
@@ -40,3 +46,14 @@ class Application:
 
     async def handle_user_voice_file(self, path: Path) -> VoiceTurn:
         return await self.handle_user_voice_clip(SpeechInputAudio.from_path(path))
+
+    async def set_avatar_expression(
+        self,
+        expression: AvatarExpression,
+        *,
+        reason: str = "manual_cli_request",
+    ) -> AvatarProviderResult:
+        return await self.avatar.apply_expression(expression, reason=reason)
+
+    async def update_avatar_lipsync(self, mouth_open: float) -> AvatarProviderResult:
+        return await self.avatar.apply_lipsync(mouth_open)

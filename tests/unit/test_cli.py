@@ -5,6 +5,7 @@ from pathlib import Path
 
 from rich.console import Console
 
+from private_ai_companion.avatar import AvatarExpression
 from private_ai_companion.bootstrap import create_application
 from private_ai_companion.ui import RichCliApp
 
@@ -52,3 +53,14 @@ def test_cli_voice_file_transcribes_and_renders_response(tmp_path: Path) -> None
     assert exit_code == 0
     assert "Voz transcrita: ola por voz" in output
     assert "Resposta fake local" in output
+
+
+def test_cli_avatar_expression_renders_result() -> None:
+    console = Console(record=True, width=100, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(cli.run_avatar_expression(AvatarExpression.HAPPY))
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Avatar: happy via fake-avatar (applied)" in output

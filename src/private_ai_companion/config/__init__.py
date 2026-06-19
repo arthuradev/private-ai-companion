@@ -1,3 +1,13 @@
+from private_ai_companion.config.avatar_config import (
+    DEFAULT_AVATAR_CONFIG_PATH,
+    AvatarConfig,
+    AvatarConfigError,
+    AvatarExpressionHotkeyConfig,
+    AvatarIdleConfig,
+    AvatarLipsyncConfig,
+    VTubeStudioConfig,
+    load_avatar_config,
+)
 from private_ai_companion.config.errors import ConfigError, PersonaConfigError
 from private_ai_companion.config.memory_config import (
     DEFAULT_MEMORY_CONFIG_PATH,
@@ -30,10 +40,16 @@ from private_ai_companion.config.speech_config import (
 )
 
 __all__ = [
+    "DEFAULT_AVATAR_CONFIG_PATH",
     "DEFAULT_MEMORY_CONFIG_PATH",
     "DEFAULT_PERSONA_CONFIG_PATH",
     "DEFAULT_PROVIDERS_CONFIG_PATH",
     "DEFAULT_SPEECH_CONFIG_PATH",
+    "AvatarConfig",
+    "AvatarConfigError",
+    "AvatarExpressionHotkeyConfig",
+    "AvatarIdleConfig",
+    "AvatarLipsyncConfig",
     "ConfigError",
     "LLMProviderConfig",
     "LLMRouterConfig",
@@ -49,6 +65,8 @@ __all__ = [
     "SpeechConfigError",
     "SpeechInputConfig",
     "TTSConfig",
+    "VTubeStudioConfig",
+    "load_avatar_config",
     "load_memory_config",
     "load_persona_profile",
     "load_providers_config",

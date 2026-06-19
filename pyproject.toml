@@ -24,6 +24,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+avatar = [
+    "websockets>=15.0",
+]
 stt = [
     "faster-whisper>=1.1.0",
 ]
