@@ -1,0 +1,8 @@
+[memory]
+database_path = "data/memory.sqlite3"
+auto_approve_low_sensitivity = false
+retention_days = 365
+
+[memory.policy]
+reject_sensitive_by_default = true
+minimum_confidence = 0.40
