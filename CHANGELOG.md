@@ -15,6 +15,8 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Entry point oficial `private-ai-companion`.
 - `Start.bat` inicial para usuários Windows.
 - Testes iniciais de sanidade e boundary arquitetural.
+- Runtime central com event bus, lifecycle, orquestrador e estado de runtime.
+- Bootstrap inicial para montar a aplicação a partir do pacote Python.
 
 ### Changed
 

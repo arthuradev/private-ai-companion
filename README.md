@@ -36,8 +36,9 @@ Este repositório já possui a fundação Python inicial da Fase 01:
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
 - pacote `private_ai_companion`;
 - entrypoint oficial `private-ai-companion`;
+- runtime central com event bus, lifecycle, orquestrador e estado;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade e boundary arquitetural inicial.
+- testes de sanidade, runtime e boundary arquitetural inicial.
 
 Ordem de leitura recomendada:
 

@@ -4,6 +4,15 @@
 
 Runtime central: eventos, event bus, orquestrador, lifecycle, estado, contratos e erros. Deve permanecer pequeno e desacoplado.
 
+## Implementado na Fase 02
+
+- Eventos base com metadata e sensibilidade.
+- Event bus assíncrono em memória.
+- Estado de runtime com fases controladas.
+- Lifecycle de start/stop.
+- Orquestrador central mínimo.
+- Erros tipados do core.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

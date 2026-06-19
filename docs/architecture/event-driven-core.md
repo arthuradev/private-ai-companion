@@ -16,6 +16,8 @@ Separar entrada, processamento e saída usando eventos internos.
 ## Eventos principais
 
 - `AppStarted`
+- `AppStopping`
+- `AppStopped`
 - `UserTextReceived`
 - `UserSpeechReceived`
 - `AssistantResponseRequested`
@@ -36,3 +38,17 @@ Separar entrada, processamento e saída usando eventos internos.
 ## Regra
 
 Eventos não devem carregar segredos nem payloads privados sem classificação de sensibilidade.
+
+## Estado na Fase 02
+
+A Fase 02 implementa a base do core orientado a eventos:
+
+- `BaseEvent` e `EventMetadata`;
+- classificação inicial de sensibilidade de eventos;
+- eventos de lifecycle `AppStarted`, `AppStopping` e `AppStopped`;
+- `EventBus` assíncrono em memória;
+- `RuntimeStateStore` com transições de lifecycle controladas;
+- `LifecycleManager` e `CoreOrchestrator`.
+
+Eventos de conversa, voz, avatar, memória, visão, ações e audit log continuam
+como contratos planejados para fases futuras.
