@@ -1,0 +1,15 @@
+[privacy.screen_capture]
+enabled = true
+provider_id = "fake-screen-capture"
+require_user_authorization = true
+allow_continuous_capture = false
+persist_screenshots_by_default = false
+allow_external_analysis = false
+
+[privacy.redaction]
+enabled = true
+redact_text_metadata = true
+
+[privacy.vision]
+provider_id = "fake-vision"
+local_only = true

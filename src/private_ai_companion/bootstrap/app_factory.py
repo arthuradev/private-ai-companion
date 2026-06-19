@@ -17,6 +17,10 @@ from private_ai_companion.adapters.speech import (
     FakeTTSProvider,
     FasterWhisperSTTProvider,
 )
+from private_ai_companion.adapters.vision import (
+    FakeScreenCaptureProvider,
+    FakeVisionProvider,
+)
 from private_ai_companion.avatar import (
     AvatarExpression,
     AvatarIdleState,
@@ -30,9 +34,11 @@ from private_ai_companion.config import (
     AvatarConfig,
     ConfigError,
     LLMProviderConfig,
+    PrivacyConfig,
     SpeechConfig,
     load_avatar_config,
     load_persona_profile,
+    load_privacy_config,
     load_providers_config,
     load_speech_config,
 )
@@ -55,6 +61,13 @@ from private_ai_companion.speech import (
     VoiceInputService,
     VoiceInputSettings,
 )
+from private_ai_companion.vision import (
+    MetadataTextRedactor,
+    ScreenCapturePolicy,
+    ScreenCaptureProvider,
+    VisionProvider,
+    VisionService,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +76,7 @@ class ApplicationConfigPaths:
     providers: Path | None = None
     speech: Path | None = None
     avatar: Path | None = None
+    privacy: Path | None = None
 
 
 def create_application(
@@ -78,6 +92,7 @@ def create_application(
     providers_config = load_providers_config(paths.providers)
     speech_config = load_speech_config(paths.speech)
     avatar_config = load_avatar_config(paths.avatar)
+    privacy_config = load_privacy_config(paths.privacy)
     providers = _build_llm_providers(providers_config.llm.enabled_providers)
     llm_router = LLMRouter(
         providers=providers,
@@ -120,6 +135,18 @@ def create_application(
         provider=_build_avatar_provider(avatar_config),
         settings=_build_avatar_service_settings(avatar_config),
     )
+    vision = VisionService(
+        event_bus=event_bus,
+        capture_provider=_build_screen_capture_provider(privacy_config),
+        redactor=MetadataTextRedactor(
+            enabled=(
+                privacy_config.redaction.enabled
+                and privacy_config.redaction.redact_text_metadata
+            )
+        ),
+        vision_provider=_build_vision_provider(privacy_config),
+        policy=_build_screen_capture_policy(privacy_config),
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
@@ -128,6 +155,7 @@ def create_application(
         speech_queue=speech_queue,
         voice_interaction=voice_interaction,
         avatar=avatar,
+        vision=vision,
     )
 
 
@@ -238,4 +266,42 @@ def _build_avatar_service_settings(
         ),
         lipsync_parameter_name=avatar_config.lipsync.parameter_name,
         lipsync_weight=avatar_config.lipsync.weight,
+    )
+
+
+def _build_screen_capture_provider(
+    privacy_config: PrivacyConfig,
+) -> ScreenCaptureProvider:
+    if privacy_config.screen_capture.provider_id == "fake-screen-capture":
+        return FakeScreenCaptureProvider()
+
+    raise ConfigError(
+        "Only fake-screen-capture is executable in Phase 10; "
+        f"provider {privacy_config.screen_capture.provider_id!r} is not implemented"
+    )
+
+
+def _build_vision_provider(privacy_config: PrivacyConfig) -> VisionProvider:
+    if privacy_config.vision.provider_id == "fake-vision":
+        return FakeVisionProvider()
+
+    raise ConfigError(
+        "Only fake-vision is executable in Phase 10; "
+        f"provider {privacy_config.vision.provider_id!r} is not implemented"
+    )
+
+
+def _build_screen_capture_policy(
+    privacy_config: PrivacyConfig,
+) -> ScreenCapturePolicy:
+    return ScreenCapturePolicy(
+        enabled=privacy_config.screen_capture.enabled,
+        require_user_authorization=(
+            privacy_config.screen_capture.require_user_authorization
+        ),
+        allow_continuous_capture=privacy_config.screen_capture.allow_continuous_capture,
+        persist_screenshots_by_default=(
+            privacy_config.screen_capture.persist_screenshots_by_default
+        ),
+        allow_external_analysis=privacy_config.screen_capture.allow_external_analysis,
     )

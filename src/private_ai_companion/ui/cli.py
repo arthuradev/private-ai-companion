@@ -103,6 +103,27 @@ class RichCliApp:
         finally:
             await self._application.stop(reason="cli_avatar_expression_finished")
 
+    async def run_screen_context(self, purpose: str) -> int:
+        self._render_startup()
+        await self._application.start()
+        try:
+            context = await self._application.request_screen_context(
+                purpose=purpose,
+                user_authorized=True,
+            )
+            self._console.print(
+                "[bold cyan]Tela:[/bold cyan] contexto temporario via "
+                f"{context.provider_id}"
+            )
+            self._console.print(f"[bold blue]Resumo:[/bold blue] {context.summary}")
+            self._console.print(
+                "[bold blue]Redaction:[/bold blue] "
+                f"{'aplicada' if context.redacted else 'sem achados'}"
+            )
+            return 0
+        finally:
+            await self._application.stop(reason="cli_screen_context_finished")
+
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")
         self._console.print(Text(figlet.renderText(PROJECT_NAME), style="bold cyan"))

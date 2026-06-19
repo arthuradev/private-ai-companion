@@ -64,3 +64,16 @@ def test_cli_avatar_expression_renders_result() -> None:
 
     assert exit_code == 0
     assert "Avatar: happy via fake-avatar (applied)" in output
+
+
+def test_cli_screen_context_renders_temporary_context() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(cli.run_screen_context("manual_test"))
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Tela: contexto temporario via fake-vision" in output
+    assert "Contexto visual fake local" in output
+    assert "Redaction: sem achados" in output

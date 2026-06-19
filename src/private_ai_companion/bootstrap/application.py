@@ -17,6 +17,11 @@ from private_ai_companion.interaction import (
     VoiceTurn,
 )
 from private_ai_companion.speech import SpeechInputAudio, SpeechQueueService
+from private_ai_companion.vision import (
+    ScreenCaptureRequest,
+    VisionService,
+    VisualContext,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +33,7 @@ class Application:
     speech_queue: SpeechQueueService
     voice_interaction: VoiceInteractionService
     avatar: AvatarService
+    vision: VisionService
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()
@@ -57,3 +63,20 @@ class Application:
 
     async def update_avatar_lipsync(self, mouth_open: float) -> AvatarProviderResult:
         return await self.avatar.apply_lipsync(mouth_open)
+
+    async def request_screen_context(
+        self,
+        *,
+        purpose: str,
+        user_authorized: bool,
+        allow_persistence: bool = False,
+        allow_external_analysis: bool = False,
+    ) -> VisualContext:
+        return await self.vision.request_screen_context(
+            ScreenCaptureRequest(
+                purpose=purpose,
+                user_authorized=user_authorized,
+                allow_persistence=allow_persistence,
+                allow_external_analysis=allow_external_analysis,
+            )
+        )

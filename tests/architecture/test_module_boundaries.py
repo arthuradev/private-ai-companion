@@ -73,6 +73,18 @@ FORBIDDEN_AVATAR_IMPORT_PREFIXES = (
     "private_ai_companion.vision",
 )
 
+FORBIDDEN_VISION_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
+    "private_ai_companion.avatar",
+    "private_ai_companion.brain",
+    "private_ai_companion.desktop",
+    "private_ai_companion.memory",
+    "private_ai_companion.safety",
+    "private_ai_companion.skills",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+)
+
 
 def imported_modules(path: Path) -> set[str]:
     modules: set[str] = set()
@@ -145,6 +157,15 @@ def test_avatar_does_not_import_runtime_edges_or_brain() -> None:
     violations = forbidden_imports_under(
         PACKAGE_ROOT / "avatar",
         FORBIDDEN_AVATAR_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_vision_does_not_import_runtime_edges_or_brain() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "vision",
+        FORBIDDEN_VISION_IMPORT_PREFIXES,
     )
 
     assert violations == {}

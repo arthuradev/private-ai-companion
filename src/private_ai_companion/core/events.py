@@ -123,3 +123,45 @@ class AvatarLipsyncUpdated(BaseEvent):
     parameter_name: str = ""
     value: float = 0.0
     provider_id: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class ScreenContextRequested(BaseEvent):
+    request_id: str = ""
+    mode: str = "manual"
+    purpose: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class ScreenContextCaptured(BaseEvent):
+    request_id: str = ""
+    screenshot_id: str = ""
+    capture_provider_id: str = ""
+    image_format: str = ""
+    width: int = 0
+    height: int = 0
+    persisted: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class ScreenContextDenied(BaseEvent):
+    request_id: str = ""
+    reason: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class ScreenContextRedacted(BaseEvent):
+    request_id: str = ""
+    screenshot_id: str = ""
+    redacted: bool = False
+    finding_count: int = 0
+
+
+@dataclass(frozen=True, slots=True)
+class VisionAnalysisReady(BaseEvent):
+    request_id: str = ""
+    context_id: str = ""
+    vision_provider_id: str = ""
+    status: str = "ready"
+    label_count: int = 0
+    redacted: bool = False

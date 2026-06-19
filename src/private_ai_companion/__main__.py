@@ -52,9 +52,24 @@ def build_parser() -> ArgumentParser:
         help="path to an avatar TOML config file",
     )
     parser.add_argument(
+        "--privacy-config",
+        type=Path,
+        help="path to a privacy TOML config file",
+    )
+    parser.add_argument(
         "--avatar-expression",
         choices=[expression.value for expression in AvatarExpression],
         help="apply one avatar expression and exit",
+    )
+    parser.add_argument(
+        "--screen-context",
+        action="store_true",
+        help="capture one authorized temporary screen context and exit",
+    )
+    parser.add_argument(
+        "--screen-purpose",
+        default="manual_cli_screen_context",
+        help="short purpose attached to an explicit screen context request",
     )
     return parser
 
@@ -68,15 +83,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     single_action_count = sum(
-        option is not None
-        for option in (
-            options.once,
-            options.voice_file,
-            options.avatar_expression,
+        (
+            options.once is not None,
+            options.voice_file is not None,
+            options.avatar_expression is not None,
+            bool(options.screen_context),
         )
     )
     if single_action_count > 1:
-        parser.error("--once, --voice-file and --avatar-expression are exclusive")
+        parser.error(
+            "--once, --voice-file, --avatar-expression and --screen-context "
+            "are exclusive"
+        )
 
     cli = RichCliApp(
         application=create_application(
@@ -85,6 +103,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 providers=options.providers_config,
                 speech=options.speech_config,
                 avatar=options.avatar_config,
+                privacy=options.privacy_config,
             ),
         )
     )
@@ -96,6 +115,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return asyncio.run(
             cli.run_avatar_expression(AvatarExpression(str(options.avatar_expression)))
         )
+    if options.screen_context:
+        return asyncio.run(cli.run_screen_context(str(options.screen_purpose)))
 
     return asyncio.run(cli.run_interactive())
 
