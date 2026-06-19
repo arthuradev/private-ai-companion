@@ -1,6 +1,6 @@
 from private_ai_companion.interaction.text import (
     AssistantTextMessage,
-    Phase03TextResponder,
+    LLMTextResponder,
     TextInteractionService,
     TextResponder,
     TextTurn,
@@ -9,7 +9,7 @@ from private_ai_companion.interaction.text import (
 
 __all__ = [
     "AssistantTextMessage",
-    "Phase03TextResponder",
+    "LLMTextResponder",
     "TextInteractionService",
     "TextResponder",
     "TextTurn",

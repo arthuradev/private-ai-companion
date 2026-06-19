@@ -4,6 +4,19 @@ from private_ai_companion.brain.context import (
     ConversationRole,
     PromptContext,
 )
+from private_ai_companion.brain.errors import (
+    BrainError,
+    LLMProviderError,
+    LLMRoutingError,
+)
+from private_ai_companion.brain.llm import (
+    LLMGenerationRequest,
+    LLMGenerationResponse,
+    LLMProvider,
+    LLMProviderKind,
+    LLMUsage,
+)
+from private_ai_companion.brain.llm_router import LLMRouter
 from private_ai_companion.brain.persona import PersonaProfile, default_persona_profile
 from private_ai_companion.brain.prompt_builder import (
     PromptBuilder,
@@ -13,9 +26,18 @@ from private_ai_companion.brain.prompt_builder import (
 )
 
 __all__ = [
+    "BrainError",
     "ContextBuilder",
     "ConversationMessage",
     "ConversationRole",
+    "LLMGenerationRequest",
+    "LLMGenerationResponse",
+    "LLMProvider",
+    "LLMProviderError",
+    "LLMProviderKind",
+    "LLMRouter",
+    "LLMRoutingError",
+    "LLMUsage",
     "PersonaProfile",
     "PromptBuilder",
     "PromptBundle",

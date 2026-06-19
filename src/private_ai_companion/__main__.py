@@ -30,6 +30,11 @@ def build_parser() -> ArgumentParser:
         type=Path,
         help="path to a persona TOML config file",
     )
+    parser.add_argument(
+        "--providers-config",
+        type=Path,
+        help="path to a providers TOML config file",
+    )
     return parser
 
 
@@ -42,7 +47,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     cli = RichCliApp(
-        application=create_application(persona_config_path=options.persona_config)
+        application=create_application(
+            persona_config_path=options.persona_config,
+            providers_config_path=options.providers_config,
+        )
     )
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))

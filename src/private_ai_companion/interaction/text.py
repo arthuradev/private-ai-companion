@@ -5,6 +5,7 @@ from typing import Protocol
 
 from private_ai_companion.brain import (
     ContextBuilder,
+    LLMRouter,
     PersonaProfile,
     PromptBuilder,
     PromptBundle,
@@ -45,27 +46,22 @@ class TextResponder(Protocol):
         ...
 
 
-class Phase03TextResponder:
-    def __init__(self, *, persona: PersonaProfile) -> None:
-        self._persona = persona
+class LLMTextResponder:
+    def __init__(self, *, router: LLMRouter) -> None:
+        self._router = router
 
     async def respond(
         self,
         message: UserTextMessage,
         prompt: PromptBundle,
     ) -> AssistantTextMessage:
-        _ = prompt
         if not message.text:
             return AssistantTextMessage(
                 text="Nao recebi texto nessa mensagem. Pode tentar de novo?"
             )
 
-        return AssistantTextMessage(
-            text=(
-                f"Recebi sua mensagem. A persona atual e {self._persona.display_name}. "
-                "A conversa com LLM configuravel sera implementada nas proximas fases."
-            )
-        )
+        response = await self._router.generate(prompt)
+        return AssistantTextMessage(text=response.text)
 
 
 class TextInteractionService:
@@ -74,15 +70,14 @@ class TextInteractionService:
         *,
         event_bus: EventBus,
         persona: PersonaProfile,
-        context_builder: ContextBuilder | None = None,
-        prompt_builder: PromptBuilder | None = None,
+        llm_router: LLMRouter,
         responder: TextResponder | None = None,
     ) -> None:
         self._event_bus = event_bus
         self._persona = persona
-        self._context_builder = context_builder or ContextBuilder()
-        self._prompt_builder = prompt_builder or PromptBuilder()
-        self._responder = responder or Phase03TextResponder(persona=persona)
+        self._context_builder = ContextBuilder()
+        self._prompt_builder = PromptBuilder()
+        self._responder = responder or LLMTextResponder(router=llm_router)
 
     async def handle_user_text(self, text: str) -> TextTurn:
         user = UserTextMessage(text=text.strip())

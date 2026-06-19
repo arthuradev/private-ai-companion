@@ -6,6 +6,7 @@ from pathlib import Path
 PACKAGE_ROOT = Path("src/private_ai_companion")
 
 FORBIDDEN_CORE_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
     "private_ai_companion.avatar",
     "private_ai_companion.desktop",
     "private_ai_companion.speech",
@@ -14,6 +15,7 @@ FORBIDDEN_CORE_IMPORT_PREFIXES = (
 )
 
 FORBIDDEN_UI_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
     "private_ai_companion.core",
     "private_ai_companion.desktop",
     "private_ai_companion.memory",
@@ -24,6 +26,7 @@ FORBIDDEN_UI_IMPORT_PREFIXES = (
 )
 
 FORBIDDEN_BRAIN_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
     "private_ai_companion.avatar",
     "private_ai_companion.desktop",
     "private_ai_companion.safety",
@@ -33,6 +36,7 @@ FORBIDDEN_BRAIN_IMPORT_PREFIXES = (
 )
 
 FORBIDDEN_CONFIG_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
     "private_ai_companion.avatar",
     "private_ai_companion.desktop",
     "private_ai_companion.speech",

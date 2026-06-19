@@ -1,0 +1,59 @@
+[llm]
+default_provider = "fake-local"
+fallback_order = ["fake-local"]
+
+[[llm.providers]]
+id = "fake-local"
+kind = "fake"
+model = "fake-local-v0"
+enabled = true
+requires_api_key = false
+api_key_env = ""
+
+[[llm.providers]]
+id = "ollama-local"
+kind = "local"
+model = "llama3.1"
+enabled = false
+requires_api_key = false
+api_key_env = ""
+
+[[llm.providers]]
+id = "lm-studio-local"
+kind = "local"
+model = "local-model"
+enabled = false
+requires_api_key = false
+api_key_env = ""
+
+[[llm.providers]]
+id = "openai-cloud"
+kind = "cloud"
+model = "openai-model"
+enabled = false
+requires_api_key = true
+api_key_env = "OPENAI_API_KEY"
+
+[[llm.providers]]
+id = "anthropic-cloud"
+kind = "cloud"
+model = "anthropic-model"
+enabled = false
+requires_api_key = true
+api_key_env = "ANTHROPIC_API_KEY"
+
+[[llm.providers]]
+id = "gemini-cloud"
+kind = "cloud"
+model = "gemini-model"
+enabled = false
+requires_api_key = true
+api_key_env = "GEMINI_API_KEY"
+
+[[llm.providers]]
+id = "openrouter-cloud"
+kind = "cloud"
+model = "openrouter/auto"
+enabled = false
+requires_api_key = true
+api_key_env = "OPENROUTER_API_KEY"
