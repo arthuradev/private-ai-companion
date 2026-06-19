@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 10:
+Este repositório já possui a base implementada até a Fase 11:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -49,9 +49,13 @@ Este repositório já possui a base implementada até a Fase 10:
   e adapter opt-in para VTube Studio;
 - vision service com captura manual autorizada, redaction de metadados de texto,
   provider fake/local e eventos sensíveis sem bytes de screenshot;
+- safety pipeline para ações locais com classificação de risco, policy,
+  dry-run, confirmação, audit log em memória e eventos sem parâmetros sensíveis;
+- desktop action service com leitura simulada de título de janela, notas locais
+  em diretório permitido e abertura simulada de apps allowlisted;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
-  memória, speech, avatar, visão, config, CLI, segurança e boundaries
+  memória, speech, avatar, visão, desktop, safety, config, CLI, segurança e boundaries
   arquiteturais.
 
 Ordem de leitura recomendada:
@@ -200,6 +204,35 @@ No Windows, o launcher continua apenas delegando para o entrypoint Python:
 
 ```text
 Start.bat --screen-context
+```
+
+Configuração padrão de ações locais seguras:
+
+```text
+configs/desktop.default.toml
+```
+
+A Fase 11 implementa o primeiro pipeline de ações locais. Ações médias exigem
+confirmação por padrão, ações críticas são bloqueadas, e o LLM não executa
+comandos diretamente. O executor padrão não roda shell nem automação livre de
+mouse/teclado.
+
+Para validar uma ação em dry-run:
+
+```text
+uv run private-ai-companion --desktop-action open-allowed-app --app-id calculator --desktop-dry-run
+```
+
+Para executar uma ação média confirmada pelo usuário:
+
+```text
+uv run private-ai-companion --desktop-action read-active-window-title --desktop-confirm
+```
+
+No Windows, o launcher continua delegando:
+
+```text
+Start.bat --desktop-action read-active-window-title --desktop-confirm
 ```
 
 Validações atuais:

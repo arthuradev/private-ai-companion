@@ -53,9 +53,10 @@ LLM sugere ActionIntent
 → schema validation
 → RiskClassifier
 → ActionPolicy
+→ DesktopPermissionPolicy
 → DryRun
 → ConfirmationGate
-→ SafeExecutor
-→ PostValidation
-→ AuditLog
+→ DesktopActionExecutor
+→ ActionExecuted
+→ InMemoryActionAuditLog
 ```

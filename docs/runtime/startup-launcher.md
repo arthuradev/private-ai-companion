@@ -84,6 +84,13 @@ provider fake/local, redaction e contexto visual temporário continuam no
 bootstrap Python, `vision/` e `adapters/vision/`; o `Start.bat` não captura tela,
 não persiste screenshot e não envia imagem para API externa.
 
+Na Fase 11, o launcher também pode repassar `--desktop-config`,
+`--desktop-action`, `--desktop-dry-run` e `--desktop-confirm`. Classificação de
+risco, policy, permissões, dry-run, confirmação e audit log continuam no
+bootstrap Python, `safety/`, `desktop/` e `adapters/desktop/`; o `Start.bat` não
+contém lógica de ação local e não executa comandos do sistema em nome da
+companion.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

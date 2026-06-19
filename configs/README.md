@@ -13,3 +13,4 @@ Current versioned examples:
 - `speech.default.toml`
 - `avatar.default.toml`
 - `privacy.default.toml`
+- `desktop.default.toml`

@@ -49,3 +49,9 @@
 - Provider fake/local como default seguro.
 - Adapters reais de captura e análise visual devem ser opt-in e passar por
   policy de privacidade antes de observar ou enviar screenshots.
+
+## Desktop actions
+
+- Executor local seguro como default.
+- Abertura real de apps, automação de janela, clipboard e arquivos devem ser
+  opt-in e passar por risk policy, dry-run, confirmação e audit log.

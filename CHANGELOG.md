@@ -59,6 +59,15 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Configuração versionável de privacidade em `configs/privacy.default.toml`.
 - CLI `--screen-context` para validar contexto visual sem captura contínua.
 - Eventos de visão sem bytes de screenshot ou texto visual cru.
+- Safety pipeline para ações locais com classificação de risco, policy,
+  confirmação, dry-run e audit log em memória.
+- Desktop action service com port `DesktopActionExecutor`.
+- Executor local seguro para notas locais, leitura simulada de título de janela
+  e abertura simulada de apps permitidos.
+- Configuração versionável de desktop em `configs/desktop.default.toml`.
+- CLI `--desktop-action` com `--desktop-dry-run` e `--desktop-confirm`.
+- Eventos `ActionIntentCreated`, `PermissionRequired`, `ActionExecuted` e
+  `AuditEventCreated` sem parâmetros sensíveis.
 
 ### Changed
 

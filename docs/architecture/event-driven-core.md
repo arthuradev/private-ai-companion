@@ -116,3 +116,16 @@ A Fase 10 adiciona os eventos de visão:
 
 Esses eventos carregam apenas identificadores, status, dimensões e contagens.
 Eles não carregam bytes de screenshot, texto visual cru ou resumo sensível.
+
+## Estado na Fase 11
+
+A Fase 11 adiciona os eventos de ações locais:
+
+- `ActionIntentCreated`;
+- `PermissionRequired`;
+- `ActionExecuted`;
+- `AuditEventCreated`.
+
+Esses eventos carregam apenas ids, tipo de ação, risco, status e decisão. Eles
+não carregam parâmetros da ação, corpo de nota, comandos, segredos ou conteúdo
+privado.

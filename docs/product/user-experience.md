@@ -25,6 +25,10 @@ Contexto visual deve ser solicitado de forma explícita. A companion não deve
 observar tela continuamente por padrão, e a interface deve deixar claro quando
 um contexto de tela temporário foi solicitado.
 
+Ações locais devem ser apresentadas como intenções revisáveis. Quando uma ação
+exigir confirmação, a interface deve mostrar o dry-run e aguardar consentimento
+explícito antes da execução.
+
 ## Proatividade
 
 A companion pode ter comportamento proativo desde o começo, mas configurável e respeitoso. Proatividade deve começar baixa e nunca envolver captura oculta de dados.

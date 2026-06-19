@@ -35,6 +35,7 @@ Permitir que o projeto troque provedores e tecnologias sem reescrever o núcleo.
 - SQLite
 - Fake screen capture
 - Fake vision
+- Safe local desktop executor
 
 ## Regra
 
@@ -130,3 +131,20 @@ src/private_ai_companion/adapters/vision/fake_vision.py
 `FakeScreenCaptureProvider` e `FakeVisionProvider` são locais, determinísticos e
 não chamam rede. O fluxo completo passa por `ScreenCapturePolicy` antes de
 captura ou análise. O core não conhece providers de visão concretos.
+
+## Estado na Fase 11
+
+A Fase 11 adiciona o port de desktop:
+
+- `DesktopActionExecutor`.
+
+Adapter concreto:
+
+```text
+src/private_ai_companion/adapters/desktop/safe_local.py
+```
+
+`SafeLocalDesktopExecutor` é local e seguro por padrão. Ele cria notas apenas no
+diretório configurado, simula abertura de apps allowlisted e não chama shell,
+mouse, teclado ou APIs externas. O fluxo completo passa por `RiskClassifier`,
+`ActionPolicy`, `DesktopPermissionPolicy`, dry-run, confirmação e audit log.
