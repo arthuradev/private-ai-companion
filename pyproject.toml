@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "private-ai-companion"
+version = "0.0.0"
+description = "Private local-first desktop AI companion foundation."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+keywords = ["ai", "companion", "desktop", "local-first", "privacy"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.scripts]
+private-ai-companion = "private_ai_companion.__main__:main"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.400",
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 88
+src = ["src", "tests"]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C4",
+    "E",
+    "F",
+    "I",
+    "N",
+    "PL",
+    "PT",
+    "RET",
+    "RUF",
+    "SIM",
+    "UP",
+    "W",
+]
+ignore = [
+    "PLR2004",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.12"
+pythonPlatform = "Windows"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
