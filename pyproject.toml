@@ -18,7 +18,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-dependencies = []
+dependencies = [
+    "pyfiglet>=1.0.4",
+    "rich>=15.0.0",
+]
 
 [project.scripts]
 private-ai-companion = "private_ai_companion.__main__:main"

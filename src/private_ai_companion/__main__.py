@@ -6,6 +6,7 @@ from collections.abc import Sequence
 
 from private_ai_companion import PROJECT_NAME, __version__
 from private_ai_companion.bootstrap import create_application
+from private_ai_companion.ui import RichCliApp
 
 
 def build_parser() -> ArgumentParser:
@@ -18,6 +19,11 @@ def build_parser() -> ArgumentParser:
         action="store_true",
         help="show the installed package version and exit",
     )
+    parser.add_argument(
+        "--once",
+        metavar="TEXT",
+        help="send one text message through the CLI and exit",
+    )
     return parser
 
 
@@ -29,13 +35,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"{PROJECT_NAME} {__version__}")
         return 0
 
-    application = create_application()
-    snapshot = asyncio.run(application.run_once())
+    cli = RichCliApp(application=create_application())
+    if options.once is not None:
+        return asyncio.run(cli.run_single_turn(str(options.once)))
 
-    print(PROJECT_NAME)
-    print(f"Runtime lifecycle completed with state: {snapshot.state.phase.value}.")
-    print("Interactive text UI will be implemented in Phase 03.")
-    return 0
+    return asyncio.run(cli.run_interactive())
 
 
 if __name__ == "__main__":

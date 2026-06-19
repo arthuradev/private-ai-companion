@@ -3,9 +3,11 @@ from private_ai_companion.core.events import (
     AppStarted,
     AppStopped,
     AppStopping,
+    AssistantTextReady,
     BaseEvent,
     EventMetadata,
     EventSensitivity,
+    UserTextReceived,
 )
 from private_ai_companion.core.lifecycle import ApplicationIdentity, LifecycleManager
 from private_ai_companion.core.orchestrator import CoreOrchestrator, RuntimeSnapshot
@@ -20,6 +22,7 @@ __all__ = [
     "AppStopped",
     "AppStopping",
     "ApplicationIdentity",
+    "AssistantTextReady",
     "BaseEvent",
     "CoreOrchestrator",
     "EventBus",
@@ -32,4 +35,5 @@ __all__ = [
     "RuntimeState",
     "RuntimeStateStore",
     "Subscription",
+    "UserTextReceived",
 ]

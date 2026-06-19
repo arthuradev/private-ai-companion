@@ -5,10 +5,13 @@ import pytest
 from private_ai_companion.__main__ import main
 
 
-def test_entrypoint_returns_success(capsys: pytest.CaptureFixture[str]) -> None:
-    assert main(()) == 0
+def test_entrypoint_single_turn_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(("--once", "hello")) == 0
     captured = capsys.readouterr()
-    assert "Runtime lifecycle completed with state: stopped." in captured.out
+    assert "private-ai-companion" in captured.out
+    assert "LLM configuravel" in captured.out
 
 
 def test_entrypoint_version_returns_success(capsys: pytest.CaptureFixture[str]) -> None:

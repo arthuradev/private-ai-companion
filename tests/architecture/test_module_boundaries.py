@@ -13,6 +13,16 @@ FORBIDDEN_CORE_IMPORT_PREFIXES = (
     "private_ai_companion.vision",
 )
 
+FORBIDDEN_UI_IMPORT_PREFIXES = (
+    "private_ai_companion.core",
+    "private_ai_companion.desktop",
+    "private_ai_companion.memory",
+    "private_ai_companion.safety",
+    "private_ai_companion.skills",
+    "private_ai_companion.speech",
+    "private_ai_companion.vision",
+)
+
 
 def imported_modules(path: Path) -> set[str]:
     modules: set[str] = set()
@@ -28,16 +38,34 @@ def imported_modules(path: Path) -> set[str]:
 
 
 def test_core_does_not_import_forbidden_boundary_modules() -> None:
-    core_paths = sorted((PACKAGE_ROOT / "core").rglob("*.py"))
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "core",
+        FORBIDDEN_CORE_IMPORT_PREFIXES,
+    )
 
+    assert violations == {}
+
+
+def test_ui_uses_public_bootstrap_instead_of_core_or_providers() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "ui",
+        FORBIDDEN_UI_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def forbidden_imports_under(
+    module_path: Path,
+    forbidden_prefixes: tuple[str, ...],
+) -> dict[str, list[str]]:
+    paths = sorted(module_path.rglob("*.py"))
     violations = {
         str(path): sorted(
             module
             for module in imported_modules(path)
-            if module.startswith(FORBIDDEN_CORE_IMPORT_PREFIXES)
+            if module.startswith(forbidden_prefixes)
         )
-        for path in core_paths
+        for path in paths
     }
-    violations = {path: modules for path, modules in violations.items() if modules}
-
-    assert violations == {}
+    return {path: modules for path, modules in violations.items() if modules}

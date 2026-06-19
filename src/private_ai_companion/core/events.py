@@ -45,3 +45,13 @@ class AppStopping(BaseEvent):
 @dataclass(frozen=True, slots=True)
 class AppStopped(BaseEvent):
     reason: str = "shutdown_complete"
+
+
+@dataclass(frozen=True, slots=True)
+class UserTextReceived(BaseEvent):
+    text: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class AssistantTextReady(BaseEvent):
+    text: str = ""

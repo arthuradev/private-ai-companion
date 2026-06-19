@@ -6,6 +6,7 @@ from private_ai_companion.core.event_bus import EventBus
 from private_ai_companion.core.lifecycle import ApplicationIdentity
 from private_ai_companion.core.orchestrator import CoreOrchestrator
 from private_ai_companion.core.runtime_state import RuntimeStateStore
+from private_ai_companion.interaction import TextInteractionService
 
 
 def create_application(
@@ -21,4 +22,5 @@ def create_application(
         state_store=state_store,
         identity=identity,
     )
-    return Application(orchestrator=orchestrator)
+    text_interaction = TextInteractionService(event_bus=event_bus)
+    return Application(orchestrator=orchestrator, text_interaction=text_interaction)
