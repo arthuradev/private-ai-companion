@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 08:
+Este repositório já possui a base implementada até a Fase 09:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -45,6 +45,8 @@ Este repositório já possui a base implementada até a Fase 08:
 - TTS fake local, fila de fala, audio player fake e interrupção testável;
 - STT fake local, VAD simples, entrada por voz a partir de clipe explícito e
   adapter opt-in para `faster-whisper`;
+- avatar service com estados visuais, expressões, idle, lipsync, provider fake
+  e adapter opt-in para VTube Studio;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
   memória, speech, config, CLI, segurança e boundaries arquiteturais.
@@ -150,6 +152,28 @@ ou em um arquivo de configuração próprio:
 
 ```text
 uv sync --extra stt
+```
+
+Configuração padrão de avatar:
+
+```text
+configs/avatar.default.toml
+```
+
+A Fase 09 implementa provider fake local, estados visuais e adapter VTube Studio
+opt-in. Por padrão, VTube Studio não é chamado. Para validar uma expressão fake:
+
+```text
+uv run private-ai-companion --avatar-expression happy
+```
+
+Para usar VTube Studio, instale o extra opcional, altere
+`avatar.provider_id` para `vtube-studio`, configure hotkeys em
+`avatar.expression_hotkeys` e mantenha o token local em `.env` usando
+`PRIVATE_AI_COMPANION_VTS_TOKEN`:
+
+```text
+uv sync --extra avatar
 ```
 
 Validações atuais:

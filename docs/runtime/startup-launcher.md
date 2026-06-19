@@ -73,6 +73,11 @@ por voz a partir de um arquivo explícito. A transcrição, VAD e seleção de S
 continuam no bootstrap Python, `interaction/` e `speech/`; o `Start.bat` não
 captura microfone nem chama `faster-whisper` diretamente.
 
+Na Fase 09, o launcher também pode repassar `--avatar-config` e
+`--avatar-expression`. Configuração, provider fake, VTube Studio, hotkeys e
+lipsync continuam no bootstrap Python, `avatar/` e `adapters/avatar/`; o
+`Start.bat` não contém lógica de avatar nem token do VTube Studio.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

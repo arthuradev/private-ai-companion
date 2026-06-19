@@ -12,6 +12,7 @@
 
 - API keys.
 - Tokens de OAuth.
+- Tokens locais de plugin, como `PRIVATE_AI_COMPANION_VTS_TOKEN`.
 - Senhas.
 - Chaves privadas.
 - URLs com credenciais.

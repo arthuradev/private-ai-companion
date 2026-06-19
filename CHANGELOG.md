@@ -45,6 +45,12 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - CLI `--voice-file` para validar transcrição de arquivo explícito sem captura
   contínua de microfone.
 - Extra opcional `stt` para instalar `faster-whisper`.
+- Avatar service com estados visuais, expressões, idle e lipsync.
+- Provider fake de avatar para testes e bootstrap local.
+- Adapter opt-in para VTube Studio via WebSocket API.
+- Configuração versionável de avatar em `configs/avatar.default.toml`.
+- CLI `--avatar-expression` para validar expressões sem depender do dashboard.
+- Extra opcional `avatar` para instalar `websockets`.
 
 ### Changed
 

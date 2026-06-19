@@ -85,3 +85,26 @@ src/private_ai_companion/adapters/speech/simple_vad.py
 `FakeSTTProvider` e `EnergyVoiceActivityDetector` são locais e determinísticos.
 `FasterWhisperSTTProvider` é opt-in e importa `faster-whisper` apenas quando o
 provider é usado. O core não conhece `faster-whisper`.
+
+## Estado na Fase 09
+
+A Fase 09 adiciona o port de avatar:
+
+- `AvatarProvider`.
+
+Adapters concretos:
+
+```text
+src/private_ai_companion/adapters/avatar/fake_avatar.py
+src/private_ai_companion/adapters/avatar/vtube_studio.py
+```
+
+`FakeAvatarProvider` é local e determinístico. `VTubeStudioAvatarProvider` é
+opt-in, usa a WebSocket API pública local do VTube Studio e importa `websockets`
+apenas quando o provider real é usado.
+
+O adapter VTube Studio usa:
+
+- `AuthenticationTokenRequest` / `AuthenticationRequest` para autorização;
+- `HotkeyTriggerRequest` para expressões configuradas como hotkeys;
+- `InjectParameterDataRequest` para lipsync por parâmetro configurável.

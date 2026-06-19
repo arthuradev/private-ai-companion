@@ -30,6 +30,8 @@ Separar entrada, processamento e saída usando eventos internos.
 - `SpeechFinished`
 - `SpeechInterrupted`
 - `AvatarStateRequested`
+- `AvatarStateApplied`
+- `AvatarLipsyncUpdated`
 - `MemoryCandidateCreated`
 - `MemoryCommitted`
 - `ScreenContextRequested`
@@ -86,3 +88,14 @@ A Fase 08 adiciona os eventos de entrada de voz:
 
 `UserSpeechReceived` carrega a transcrição e deve usar sensibilidade `private`.
 Eventos de ciclo de voz não carregam bytes de áudio.
+
+## Estado na Fase 09
+
+A Fase 09 adiciona os eventos de avatar:
+
+- `AvatarStateRequested`;
+- `AvatarStateApplied`;
+- `AvatarLipsyncUpdated`.
+
+Esses eventos representam estado visual e lipsync. Eles não carregam imagem,
+modelo Live2D ou token do VTube Studio.

@@ -42,3 +42,4 @@
 
 - VTube Studio + Live2D inicialmente.
 - Adapter abstrato para alternativas futuras.
+- `websockets` como dependência opcional para o adapter VTube Studio.
