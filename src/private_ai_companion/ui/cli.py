@@ -71,7 +71,7 @@ class RichCliApp:
             Panel.fit(
                 "private-ai-companion\n"
                 "CLI inicial com Rich/Pyfiglet\n"
-                "Conversa por texto local da Fase 03",
+                "Conversa por texto local com persona configuravel",
                 title="Startup",
                 border_style="cyan",
             )
@@ -81,7 +81,8 @@ class RichCliApp:
         turn = await self._application.handle_user_text(raw_text)
         self._console.print(f"[bold blue]Voce:[/bold blue] {turn.user.text}")
         self._console.print(
-            f"[bold magenta]Companion:[/bold magenta] {turn.assistant.text}"
+            f"[bold magenta]{self._application.persona.display_name}:[/bold magenta] "
+            f"{turn.assistant.text}"
         )
 
     def _read_prompt(self, prompt: str) -> str:

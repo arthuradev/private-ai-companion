@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from argparse import ArgumentParser
 from collections.abc import Sequence
+from pathlib import Path
 
 from private_ai_companion import PROJECT_NAME, __version__
 from private_ai_companion.bootstrap import create_application
@@ -24,6 +25,11 @@ def build_parser() -> ArgumentParser:
         metavar="TEXT",
         help="send one text message through the CLI and exit",
     )
+    parser.add_argument(
+        "--persona-config",
+        type=Path,
+        help="path to a persona TOML config file",
+    )
     return parser
 
 
@@ -35,7 +41,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"{PROJECT_NAME} {__version__}")
         return 0
 
-    cli = RichCliApp(application=create_application())
+    cli = RichCliApp(
+        application=create_application(persona_config_path=options.persona_config)
+    )
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
 

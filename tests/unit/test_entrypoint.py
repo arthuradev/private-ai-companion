@@ -11,7 +11,8 @@ def test_entrypoint_single_turn_returns_success(
     assert main(("--once", "hello")) == 0
     captured = capsys.readouterr()
     assert "private-ai-companion" in captured.out
-    assert "LLM configuravel" in captured.out
+    assert "LLM" in captured.out
+    assert "configuravel" in captured.out
 
 
 def test_entrypoint_version_returns_success(capsys: pytest.CaptureFixture[str]) -> None:

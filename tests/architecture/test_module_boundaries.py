@@ -23,6 +23,23 @@ FORBIDDEN_UI_IMPORT_PREFIXES = (
     "private_ai_companion.vision",
 )
 
+FORBIDDEN_BRAIN_IMPORT_PREFIXES = (
+    "private_ai_companion.avatar",
+    "private_ai_companion.desktop",
+    "private_ai_companion.safety",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
+)
+
+FORBIDDEN_CONFIG_IMPORT_PREFIXES = (
+    "private_ai_companion.avatar",
+    "private_ai_companion.desktop",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
+)
+
 
 def imported_modules(path: Path) -> set[str]:
     modules: set[str] = set()
@@ -50,6 +67,24 @@ def test_ui_uses_public_bootstrap_instead_of_core_or_providers() -> None:
     violations = forbidden_imports_under(
         PACKAGE_ROOT / "ui",
         FORBIDDEN_UI_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_brain_does_not_import_runtime_edges_or_safety_policy() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "brain",
+        FORBIDDEN_BRAIN_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_config_does_not_import_runtime_edges() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "config",
+        FORBIDDEN_CONFIG_IMPORT_PREFIXES,
     )
 
     assert violations == {}

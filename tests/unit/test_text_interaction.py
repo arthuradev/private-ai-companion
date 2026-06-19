@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 
+from private_ai_companion.brain import default_persona_profile
 from private_ai_companion.core import (
     AssistantTextReady,
     BaseEvent,
@@ -14,7 +15,7 @@ from private_ai_companion.interaction import TextInteractionService
 
 def test_text_interaction_publishes_user_and_assistant_events() -> None:
     bus = EventBus()
-    service = TextInteractionService(event_bus=bus)
+    service = TextInteractionService(event_bus=bus, persona=default_persona_profile())
     received: list[BaseEvent] = []
 
     def record_event(event: BaseEvent) -> None:
@@ -26,6 +27,7 @@ def test_text_interaction_publishes_user_and_assistant_events() -> None:
 
     assert turn.user.text == "hello"
     assert "LLM configuravel" in turn.assistant.text
+    assert "Display name: Companion" in turn.prompt.as_text()
     assert [event.name for event in received] == [
         "UserTextReceived",
         "AssistantTextReady",
@@ -41,7 +43,10 @@ def test_text_interaction_publishes_user_and_assistant_events() -> None:
 
 
 def test_text_interaction_handles_empty_text_without_persistence() -> None:
-    service = TextInteractionService(event_bus=EventBus())
+    service = TextInteractionService(
+        event_bus=EventBus(),
+        persona=default_persona_profile(),
+    )
 
     turn = asyncio.run(service.handle_user_text("   "))
 

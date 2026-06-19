@@ -18,6 +18,7 @@ def test_cli_single_turn_renders_banner_and_local_response() -> None:
     assert exit_code == 0
     assert "private-ai-companion" in output
     assert "CLI inicial com Rich/Pyfiglet" in output
+    assert "persona configuravel" in output
     assert "Voce: ola" in output
     assert "LLM configuravel" in output
 
