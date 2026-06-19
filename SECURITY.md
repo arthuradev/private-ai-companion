@@ -15,6 +15,7 @@
 7. Memória permanente é governada.
 8. Screenshots são temporários por padrão.
 9. Provedores cloud devem ser configuráveis e transparentes.
+10. Skills não podem bypassar policy, permissions ou confirmação.
 
 ## 3. Níveis de risco
 
@@ -77,6 +78,10 @@ LLM output
 → Post-validation
 → Audit log
 ```
+
+Skills que solicitam efeitos locais entram nesse mesmo pipeline. Manifest e
+configuração de skill não substituem classificação de risco, dry-run,
+confirmação, permissões e audit log.
 
 ## 6. Memória
 

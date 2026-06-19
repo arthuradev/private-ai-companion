@@ -14,3 +14,4 @@ Current versioned examples:
 - `avatar.default.toml`
 - `privacy.default.toml`
 - `desktop.default.toml`
+- `skills.default.toml`

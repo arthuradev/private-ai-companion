@@ -29,6 +29,11 @@ Ações locais devem ser apresentadas como intenções revisáveis. Quando uma a
 exigir confirmação, a interface deve mostrar o dry-run e aguardar consentimento
 explícito antes da execução.
 
+Skills devem ser apresentadas como capacidades configuráveis, não como
+automação invisível. Quando uma skill solicitar efeito local, a interface deve
+mostrar o resultado da skill e o status de cada efeito, incluindo dry-run,
+negação ou necessidade de confirmação.
+
 ## Proatividade
 
 A companion pode ter comportamento proativo desde o começo, mas configurável e respeitoso. Proatividade deve começar baixa e nunca envolver captura oculta de dados.

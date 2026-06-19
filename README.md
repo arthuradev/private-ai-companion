@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 11:
+Este repositório já possui a base implementada até a Fase 12:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -53,20 +53,23 @@ Este repositório já possui a base implementada até a Fase 11:
   dry-run, confirmação, audit log em memória e eventos sem parâmetros sensíveis;
 - desktop action service com leitura simulada de título de janela, notas locais
   em diretório permitido e abertura simulada de apps allowlisted;
+- sistema inicial de skills com manifest, registry, manager governado por
+  policy e eventos sanitizados;
+- skills embutidas `builtin.status`, `builtin.local_note` e
+  `builtin.open_allowed_app`;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
-  memória, speech, avatar, visão, desktop, safety, config, CLI, segurança e boundaries
-  arquiteturais.
+  memória, speech, avatar, visão, desktop, skills, safety, config, CLI,
+  segurança e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
-1. `PROMPT-CODEX.md`
-2. `AGENTS.md`
-3. `SDD.md`
-4. `ARCHITECTURE.md`
-5. `GSD.md`
-6. `SECURITY.md`
-7. `docs/implementation/`
+1. `AGENTS.md`
+2. `SDD.md`
+3. `ARCHITECTURE.md`
+4. `GSD.md`
+5. `SECURITY.md`
+6. `docs/implementation/`
 
 ## Stack planejada
 
@@ -235,6 +238,35 @@ No Windows, o launcher continua delegando:
 Start.bat --desktop-action read-active-window-title --desktop-confirm
 ```
 
+Configuração padrão de skills:
+
+```text
+configs/skills.default.toml
+```
+
+A Fase 12 implementa manifests, registry e manager de skills. Skills podem
+declarar permissões e efeitos, mas efeitos locais continuam passando pelo
+pipeline de ações seguras. O LLM não executa comandos diretamente, e skills não
+podem burlar `safety/`.
+
+Para validar uma skill sem efeito local:
+
+```text
+uv run private-ai-companion --skill builtin.status
+```
+
+Para validar uma skill que solicita a abertura de app permitido em dry-run:
+
+```text
+uv run private-ai-companion --skill builtin.open_allowed_app --skill-input app_id=calculator --skill-dry-run
+```
+
+No Windows, o launcher continua delegando ao entrypoint oficial:
+
+```text
+Start.bat --skill builtin.status
+```
+
 Validações atuais:
 
 ```text
@@ -251,7 +283,6 @@ uv run pyright
 - `ARCHITECTURE.md`: arquitetura técnica e limites entre módulos.
 - `SECURITY.md`: modelo de segurança e privacidade.
 - `AGENTS.md`: instruções permanentes para agentes de IA.
-- `PROMPT-CODEX.md`: prompt curto para iniciar o Codex.
 - `docs/architecture/`: detalhes arquiteturais.
 - `docs/implementation/`: fases de implementação.
 - `docs/safety/`: políticas de risco, privacidade e dados.

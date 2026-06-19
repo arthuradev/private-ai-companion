@@ -43,6 +43,9 @@ Separar entrada, processamento e saída usando eventos internos.
 - `PermissionRequired`
 - `ActionExecuted`
 - `AuditEventCreated`
+- `SkillInvoked`
+- `SkillDenied`
+- `SkillCompleted`
 
 ## Regra
 
@@ -129,3 +132,15 @@ A Fase 11 adiciona os eventos de ações locais:
 Esses eventos carregam apenas ids, tipo de ação, risco, status e decisão. Eles
 não carregam parâmetros da ação, corpo de nota, comandos, segredos ou conteúdo
 privado.
+
+## Estado na Fase 12
+
+A Fase 12 adiciona os eventos de skills:
+
+- `SkillInvoked`;
+- `SkillDenied`;
+- `SkillCompleted`.
+
+Esses eventos carregam apenas skill id, request id, source, motivo de negação,
+status e contagem de efeitos. Eles não carregam input da skill, parâmetros dos
+efeitos, corpo de nota, segredos ou conteúdo privado.

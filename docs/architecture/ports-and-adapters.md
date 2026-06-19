@@ -15,6 +15,7 @@ Permitir que o projeto troque provedores e tecnologias sem reescrever o núcleo.
 - `MemoryStore`
 - `DesktopActionExecutor`
 - `Skill`
+- `SkillEffectExecutor`
 - `ConfigProvider`
 
 ## Adapters planejados
@@ -148,3 +149,21 @@ src/private_ai_companion/adapters/desktop/safe_local.py
 diretório configurado, simula abertura de apps allowlisted e não chama shell,
 mouse, teclado ou APIs externas. O fluxo completo passa por `RiskClassifier`,
 `ActionPolicy`, `DesktopPermissionPolicy`, dry-run, confirmação e audit log.
+
+## Estado na Fase 12
+
+A Fase 12 adiciona os ports de skills:
+
+- `BaseSkill`;
+- `SkillEffectExecutor`.
+
+As skills embutidas vivem em `skills/` e expõem manifests estáveis. Elas não
+importam `desktop/` nem adapters concretos. Efeitos locais são descritos como
+`SkillEffectRequest` e executados pelo adapter de bootstrap:
+
+```text
+src/private_ai_companion/bootstrap/skill_effects.py
+```
+
+`DesktopSkillEffectExecutor` traduz efeitos de desktop para
+`DesktopActionService`, preservando o pipeline de segurança da Fase 11.

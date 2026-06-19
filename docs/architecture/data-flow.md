@@ -60,3 +60,22 @@ LLM sugere ActionIntent
 → ActionExecuted
 → InMemoryActionAuditLog
 ```
+
+## Skill com efeito local
+
+```text
+Usuário ou serviço interno solicita skill
+→ SkillRequest
+→ SkillInvoked
+→ SkillPolicy
+→ BaseSkill.invoke
+→ SkillEffectRequest
+→ DesktopSkillEffectExecutor
+→ pipeline de Ação local
+→ SkillCompleted
+→ SkillRunResult
+```
+
+Uma skill não executa comandos diretamente. Quando o efeito representa ação de
+desktop, ele entra no mesmo fluxo de risco, dry-run, confirmação, execução e
+auditoria das ações locais.

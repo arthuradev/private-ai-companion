@@ -6,18 +6,21 @@ Definir como o Codex deve implementar `private-ai-companion` sem depender de pro
 
 ## Fluxo oficial
 
-1. Ler `PROMPT-CODEX.md`.
-2. Ler `AGENTS.md`.
-3. Ler `SDD.md`.
-4. Ler `ARCHITECTURE.md`.
-5. Ler `GSD.md`.
-6. Ler documento da fase atual.
-7. Criar branch apropriada.
-8. Implementar a fase.
-9. Executar validações.
-10. Fazer commits.
-11. Apresentar relatório.
-12. Parar e pedir autorização para próxima fase.
+1. Ler `AGENTS.md`.
+2. Ler `SDD.md`.
+3. Ler `ARCHITECTURE.md`.
+4. Ler `GSD.md`.
+5. Ler `SECURITY.md`.
+6. Ler `CONTRIBUTING.md`.
+7. Ler `docs/architecture/overview.md`.
+8. Ler `docs/architecture/module-boundaries.md`.
+9. Ler documentos em `docs/implementation/` em ordem numérica até a fase atual.
+10. Criar branch apropriada.
+11. Implementar a fase.
+12. Executar validações.
+13. Fazer commits.
+14. Apresentar relatório.
+15. Parar e pedir autorização para próxima fase.
 
 ## Autonomia permitida
 

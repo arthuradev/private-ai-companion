@@ -91,6 +91,12 @@ bootstrap Python, `safety/`, `desktop/` e `adapters/desktop/`; o `Start.bat` nã
 contém lógica de ação local e não executa comandos do sistema em nome da
 companion.
 
+Na Fase 12, o launcher também pode repassar `--skills-config`, `--skill`,
+`--skill-input`, `--skill-dry-run` e `--skill-confirm`. Manifest, registry,
+policy de skills e execução de efeitos continuam no bootstrap Python,
+`skills/`, `safety/` e `desktop/`; o `Start.bat` não contém lógica de skill,
+não interpreta manifests e não executa efeitos diretamente.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

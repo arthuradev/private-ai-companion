@@ -68,6 +68,15 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - CLI `--desktop-action` com `--desktop-dry-run` e `--desktop-confirm`.
 - Eventos `ActionIntentCreated`, `PermissionRequired`, `ActionExecuted` e
   `AuditEventCreated` sem parâmetros sensíveis.
+- Sistema inicial de skills com manifests, registry, manager, policy e executor
+  de efeitos governado.
+- Skills embutidas `builtin.status`, `builtin.local_note` e
+  `builtin.open_allowed_app`.
+- Configuração versionável de skills em `configs/skills.default.toml`.
+- CLI `--skill`, `--skill-input`, `--skill-dry-run`, `--skill-confirm` e
+  `--skills-config`.
+- Eventos `SkillInvoked`, `SkillDenied` e `SkillCompleted` sem input sensível.
+- Testes de segurança garantindo que skills não bypassam o pipeline de ações.
 
 ### Changed
 

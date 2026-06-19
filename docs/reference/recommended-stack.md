@@ -55,3 +55,12 @@
 - Executor local seguro como default.
 - Abertura real de apps, automação de janela, clipboard e arquivos devem ser
   opt-in e passar por risk policy, dry-run, confirmação e audit log.
+
+## Skills
+
+- Manifests tipados e versionados para cada skill.
+- Registry em memória para skills embutidas e futuras extensões.
+- Manager governado por policy antes de invocar skills.
+- Efeitos representados como requests estruturados e executados por ports.
+- Nenhuma skill deve chamar shell, rede, filesystem amplo ou providers externos
+  sem adapter, policy e consentimento explícito.
