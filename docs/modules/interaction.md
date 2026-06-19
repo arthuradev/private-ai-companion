@@ -18,6 +18,12 @@ Gerencia turnos de conversa, entrada/saída, interrupção, roteamento de texto/
 - O prompt é montado internamente para testes e futura integração com LLM, mas
   ainda não é enviado para provider externo.
 
+## Atualizado na Fase 05
+
+- A resposta do turno passa pelo `LLMRouter`.
+- O provider padrão é fake/local e não chama rede.
+- Providers externos reais continuam desabilitados e planejados.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

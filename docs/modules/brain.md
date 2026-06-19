@@ -14,6 +14,15 @@ Contém persona, prompt builder, context builder, LLM router, response planner e
 
 LLM router, response planner e emotion planner continuam para fases futuras.
 
+## Implementado na Fase 05
+
+- Contrato `LLMProvider`.
+- `LLMRouter` com provider padrão e fallback.
+- Request/response tipados para geração de texto.
+- Provider fake local em adapter concreto.
+
+Response planner, emotion planner e providers reais continuam para fases futuras.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

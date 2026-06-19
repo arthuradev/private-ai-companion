@@ -24,6 +24,10 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Loader tipado de configuração de persona.
 - Context builder e prompt builder estruturado.
 - Testes de prompt, persona config e boundaries de `brain`/`config`.
+- LLM router com fallback e contratos de provider.
+- Provider fake local para testes e desenvolvimento.
+- Configuração versionável de providers em `configs/providers.default.toml`.
+- Providers locais/cloud planejados, desabilitados por padrão e sem segredos.
 
 ### Changed
 

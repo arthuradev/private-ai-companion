@@ -40,8 +40,9 @@ Este repositório já possui a base implementada até a Fase 03:
 - CLI inicial com Rich/Pyfiglet e conversa por texto local;
 - persona configurável por TOML;
 - context builder e prompt builder testáveis;
+- LLM router com provider fake local e providers locais/cloud planejados;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade, runtime, interação por texto, prompt, config, CLI e boundaries arquiteturais.
+- testes de sanidade, runtime, interação por texto, prompt, LLM router, config, CLI e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -99,6 +100,16 @@ Para usar um arquivo de persona específico:
 ```text
 uv run private-ai-companion --persona-config configs/persona.default.toml
 ```
+
+Para usar configuração explícita de providers:
+
+```text
+uv run private-ai-companion --providers-config configs/providers.default.toml
+```
+
+Por padrão, apenas o provider fake local fica habilitado. Providers locais/cloud
+reais aparecem como configuração planejada desabilitada e não são chamados sem
+implementação e configuração futura.
 
 Validações atuais:
 
