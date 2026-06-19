@@ -12,3 +12,4 @@ Current versioned examples:
 - `memory.default.toml`
 - `speech.default.toml`
 - `avatar.default.toml`
+- `privacy.default.toml`

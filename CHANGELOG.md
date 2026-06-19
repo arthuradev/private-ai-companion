@@ -51,6 +51,14 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Configuração versionável de avatar em `configs/avatar.default.toml`.
 - CLI `--avatar-expression` para validar expressões sem depender do dashboard.
 - Extra opcional `avatar` para instalar `websockets`.
+- Vision service para contexto visual temporário com captura manual autorizada.
+- Policy de captura de tela com bloqueio padrão de captura contínua, persistência
+  de screenshot e análise externa.
+- Redaction de metadados de texto visível antes da análise de visão.
+- Providers fake locais para captura de tela e análise visual.
+- Configuração versionável de privacidade em `configs/privacy.default.toml`.
+- CLI `--screen-context` para validar contexto visual sem captura contínua.
+- Eventos de visão sem bytes de screenshot ou texto visual cru.
 
 ### Changed
 

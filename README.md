@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 09:
+Este repositório já possui a base implementada até a Fase 10:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -47,9 +47,12 @@ Este repositório já possui a base implementada até a Fase 09:
   adapter opt-in para `faster-whisper`;
 - avatar service com estados visuais, expressões, idle, lipsync, provider fake
   e adapter opt-in para VTube Studio;
+- vision service com captura manual autorizada, redaction de metadados de texto,
+  provider fake/local e eventos sensíveis sem bytes de screenshot;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
-  memória, speech, config, CLI, segurança e boundaries arquiteturais.
+  memória, speech, avatar, visão, config, CLI, segurança e boundaries
+  arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -174,6 +177,29 @@ Para usar VTube Studio, instale o extra opcional, altere
 
 ```text
 uv sync --extra avatar
+```
+
+Configuração padrão de privacidade e visão:
+
+```text
+configs/privacy.default.toml
+```
+
+A Fase 10 implementa o fluxo de contexto visual temporário com policy
+determinística. Por padrão, a captura exige autorização humana, não persiste
+screenshot, não permite captura contínua e não envia imagem para API externa.
+O provider padrão é fake/local para desenvolvimento e testes.
+
+Para validar o fluxo de contexto de tela pelo entrypoint oficial:
+
+```text
+uv run private-ai-companion --screen-context
+```
+
+No Windows, o launcher continua apenas delegando para o entrypoint Python:
+
+```text
+Start.bat --screen-context
 ```
 
 Validações atuais:

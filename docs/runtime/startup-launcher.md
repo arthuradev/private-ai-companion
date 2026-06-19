@@ -78,6 +78,12 @@ Na Fase 09, o launcher também pode repassar `--avatar-config` e
 lipsync continuam no bootstrap Python, `avatar/` e `adapters/avatar/`; o
 `Start.bat` não contém lógica de avatar nem token do VTube Studio.
 
+Na Fase 10, o launcher também pode repassar `--privacy-config`,
+`--screen-context` e `--screen-purpose`. Policy de privacidade, seleção de
+provider fake/local, redaction e contexto visual temporário continuam no
+bootstrap Python, `vision/` e `adapters/vision/`; o `Start.bat` não captura tela,
+não persiste screenshot e não envia imagem para API externa.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

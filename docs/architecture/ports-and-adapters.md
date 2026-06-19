@@ -10,6 +10,7 @@ Permitir que o projeto troque provedores e tecnologias sem reescrever o núcleo.
 - `STTProvider`
 - `TTSProvider`
 - `AvatarProvider`
+- `ScreenCaptureProvider`
 - `VisionProvider`
 - `MemoryStore`
 - `DesktopActionExecutor`
@@ -32,6 +33,8 @@ Permitir que o projeto troque provedores e tecnologias sem reescrever o núcleo.
 - EdgeTTS
 - VTube Studio
 - SQLite
+- Fake screen capture
+- Fake vision
 
 ## Regra
 
@@ -108,3 +111,22 @@ O adapter VTube Studio usa:
 - `AuthenticationTokenRequest` / `AuthenticationRequest` para autorização;
 - `HotkeyTriggerRequest` para expressões configuradas como hotkeys;
 - `InjectParameterDataRequest` para lipsync por parâmetro configurável.
+
+## Estado na Fase 10
+
+A Fase 10 adiciona os ports de visão:
+
+- `ScreenCaptureProvider`;
+- `ImageRedactor`;
+- `VisionProvider`.
+
+Adapters concretos fake:
+
+```text
+src/private_ai_companion/adapters/vision/fake_capture.py
+src/private_ai_companion/adapters/vision/fake_vision.py
+```
+
+`FakeScreenCaptureProvider` e `FakeVisionProvider` são locais, determinísticos e
+não chamam rede. O fluxo completo passa por `ScreenCapturePolicy` antes de
+captura ou análise. O core não conhece providers de visão concretos.

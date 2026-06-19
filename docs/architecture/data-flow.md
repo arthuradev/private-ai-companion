@@ -37,8 +37,8 @@ Microfone
 ```text
 Usuário solicita contexto visual
 → ScreenCapturePolicy
-→ PermissionManager
-→ ScreenshotService
+→ Autorização explícita
+→ ScreenCaptureProvider
 → Redactor
 → VisionProvider
 → TemporaryVisualContext

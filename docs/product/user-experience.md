@@ -21,6 +21,10 @@
 7. Memória candidata é tratada por policy.
 8. Ações locais pedem confirmação quando necessário.
 
+Contexto visual deve ser solicitado de forma explícita. A companion não deve
+observar tela continuamente por padrão, e a interface deve deixar claro quando
+um contexto de tela temporário foi solicitado.
+
 ## Proatividade
 
 A companion pode ter comportamento proativo desde o começo, mas configurável e respeitoso. Proatividade deve começar baixa e nunca envolver captura oculta de dados.

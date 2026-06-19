@@ -27,3 +27,7 @@ O usuário deve controlar quais dados são salvos, enviados e usados.
 - Microfone real permanece desabilitado por padrão.
 - Eventos de voz não devem carregar bytes de áudio.
 - Transcrições devem ser tratadas como dados privados.
+- Contexto de tela na Fase 10 exige solicitação explícita.
+- Captura contínua de tela permanece bloqueada por padrão.
+- Eventos de visão não devem carregar bytes de screenshot nem texto visual cru.
+- Análise externa de screenshot permanece bloqueada por padrão.

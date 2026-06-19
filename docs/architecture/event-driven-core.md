@@ -35,6 +35,10 @@ Separar entrada, processamento e saída usando eventos internos.
 - `MemoryCandidateCreated`
 - `MemoryCommitted`
 - `ScreenContextRequested`
+- `ScreenContextCaptured`
+- `ScreenContextDenied`
+- `ScreenContextRedacted`
+- `VisionAnalysisReady`
 - `ActionIntentCreated`
 - `PermissionRequired`
 - `ActionExecuted`
@@ -99,3 +103,16 @@ A Fase 09 adiciona os eventos de avatar:
 
 Esses eventos representam estado visual e lipsync. Eles não carregam imagem,
 modelo Live2D ou token do VTube Studio.
+
+## Estado na Fase 10
+
+A Fase 10 adiciona os eventos de visão:
+
+- `ScreenContextRequested`;
+- `ScreenContextCaptured`;
+- `ScreenContextDenied`;
+- `ScreenContextRedacted`;
+- `VisionAnalysisReady`.
+
+Esses eventos carregam apenas identificadores, status, dimensões e contagens.
+Eles não carregam bytes de screenshot, texto visual cru ou resumo sensível.
