@@ -42,8 +42,9 @@ Este repositório já possui a base implementada até a Fase 03:
 - context builder e prompt builder testáveis;
 - LLM router com provider fake local e providers locais/cloud planejados;
 - memória local SQLite com policy e revisão explícita;
+- TTS fake local, fila de fala, audio player fake e interrupção testável;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade, runtime, interação por texto, prompt, LLM router, memória, config, CLI, segurança e boundaries arquiteturais.
+- testes de sanidade, runtime, interação por texto, prompt, LLM router, memória, speech, config, CLI, segurança e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -120,6 +121,15 @@ configs/memory.default.toml
 
 A Fase 06 implementa repository SQLite, policy e revisão de memórias. A conversa
 ainda não grava memórias automaticamente.
+
+Configuração padrão de fala:
+
+```text
+configs/speech.default.toml
+```
+
+A Fase 07 implementa TTS fake local, fila de fala e interrupção. A conversa
+ainda não reproduz áudio real automaticamente.
 
 Validações atuais:
 

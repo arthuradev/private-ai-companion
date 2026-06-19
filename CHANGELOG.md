@@ -32,6 +32,11 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Policy de memória com rejeição padrão de conteúdo sensível.
 - Serviço de revisão para aprovar, rejeitar, editar e apagar memórias.
 - Configuração versionável de memória em `configs/memory.default.toml`.
+- TTS fake local e contratos de provider/player.
+- Fila de fala com eventos `TTSRequested`, `SpeechStarted`, `SpeechFinished` e
+  `SpeechInterrupted`.
+- Interrupção de fala com limpeza da fila e cancelamento do item atual.
+- Configuração versionável de speech em `configs/speech.default.toml`.
 
 ### Changed
 

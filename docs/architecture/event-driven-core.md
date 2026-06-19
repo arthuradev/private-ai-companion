@@ -60,3 +60,15 @@ A Fase 03 adiciona os eventos de texto:
 Esses eventos são usados pela interação local de texto. Eventos de voz, avatar,
 memória, visão, ações e audit log continuam como contratos planejados para fases
 futuras.
+
+## Estado na Fase 07
+
+A Fase 07 adiciona os eventos de fala:
+
+- `TTSRequested`;
+- `SpeechStarted`;
+- `SpeechFinished`;
+- `SpeechInterrupted`.
+
+Esses eventos são usados pela fila de fala e pelo fluxo fake de TTS/playback.
+Entrada por voz ainda fica para a Fase 08.

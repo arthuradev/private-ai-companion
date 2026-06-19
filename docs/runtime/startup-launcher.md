@@ -64,6 +64,10 @@ Na Fase 05, o launcher também pode repassar `--providers-config`. A seleção d
 providers e o roteamento de LLM continuam no bootstrap Python e no módulo
 `brain/`; o `Start.bat` não contém lógica de provider.
 
+Na Fase 07, o launcher também pode repassar `--speech-config`. A configuração de
+TTS, fila e playback continua no bootstrap Python e no módulo `speech/`; o
+`Start.bat` não contém lógica de áudio.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:
