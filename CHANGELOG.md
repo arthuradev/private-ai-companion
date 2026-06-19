@@ -17,6 +17,9 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Testes iniciais de sanidade e boundary arquitetural.
 - Runtime central com event bus, lifecycle, orquestrador e estado de runtime.
 - Bootstrap inicial para montar a aplicação a partir do pacote Python.
+- CLI inicial com Rich/Pyfiglet.
+- Conversa por texto local da Fase 03, sem LLM ou memória permanente.
+- Eventos `UserTextReceived` e `AssistantTextReady`.
 
 ### Changed
 

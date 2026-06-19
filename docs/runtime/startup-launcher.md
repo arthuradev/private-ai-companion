@@ -51,9 +51,10 @@ Start.bat
 → entrypoint definido em pyproject.toml
 ```
 
-Na Fase 02, o entrypoint monta a aplicação pelo bootstrap, executa o lifecycle
-mínimo do core e encerra com estado `stopped`. A CLI com Rich/Pyfiglet e
-conversa por texto será implementada na Fase 03.
+Na Fase 03, o entrypoint monta a aplicação pelo bootstrap e inicia a CLI com
+Rich/Pyfiglet. O usuário vê o banner `private-ai-companion` ao iniciar pelo
+`Start.bat` e pode conversar por texto usando a resposta local temporária da
+fase.
 
 ## Responsabilidades que não pertencem ao `Start.bat`
 

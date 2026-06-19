@@ -50,5 +50,13 @@ A Fase 02 implementa a base do core orientado a eventos:
 - `RuntimeStateStore` com transições de lifecycle controladas;
 - `LifecycleManager` e `CoreOrchestrator`.
 
-Eventos de conversa, voz, avatar, memória, visão, ações e audit log continuam
-como contratos planejados para fases futuras.
+## Estado na Fase 03
+
+A Fase 03 adiciona os eventos de texto:
+
+- `UserTextReceived`;
+- `AssistantTextReady`.
+
+Esses eventos são usados pela interação local de texto. Eventos de voz, avatar,
+memória, visão, ações e audit log continuam como contratos planejados para fases
+futuras.

@@ -4,6 +4,13 @@
 
 Gerencia turnos de conversa, entrada/saída, interrupção, roteamento de texto/voz e coordenação multimodal.
 
+## Implementado na Fase 03
+
+- Serviço de interação por texto.
+- Turno local com mensagem do usuário e resposta da companion.
+- Publicação dos eventos `UserTextReceived` e `AssistantTextReady`.
+- Responder local temporário da Fase 03, sem LLM, prompt builder ou memória.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

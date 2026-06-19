@@ -30,15 +30,16 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a fundação Python inicial da Fase 01:
+Este repositório já possui a base implementada até a Fase 03:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
 - pacote `private_ai_companion`;
 - entrypoint oficial `private-ai-companion`;
 - runtime central com event bus, lifecycle, orquestrador e estado;
+- CLI inicial com Rich/Pyfiglet e conversa por texto local;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade, runtime e boundary arquitetural inicial.
+- testes de sanidade, runtime, interação por texto, CLI e boundary arquitetural inicial.
 
 Ordem de leitura recomendada:
 
@@ -85,7 +86,13 @@ uv sync
 uv run private-ai-companion
 ```
 
-Validações da Fase 01:
+Para executar uma única mensagem e encerrar, útil para validação:
+
+```text
+uv run private-ai-companion --once "olá"
+```
+
+Validações atuais:
 
 ```text
 uv run ruff format --check
@@ -115,13 +122,13 @@ Apache License 2.0. Consulte `LICENSE.md`.
 
 O projeto mantém um fluxo amigável de inicialização no Windows. O usuário final não deve ser obrigado a conhecer comandos técnicos para abrir a companion.
 
-Na Fase 01, o caminho recomendado já é:
+Na Fase 03, o caminho recomendado já é:
 
 ```text
 Start.bat
 → valida ambiente
 → prepara dependências pelo uv quando necessário
-→ inicia o entrypoint oficial private-ai-companion
+→ inicia a CLI Rich/Pyfiglet pelo entrypoint oficial private-ai-companion
 ```
 
-Comandos técnicos continuam disponíveis para desenvolvedores. A CLI com Rich/Pyfiglet será implementada na Fase 03, mantendo o `Start.bat` como entrypoint principal de uso no Windows.
+Comandos técnicos continuam disponíveis para desenvolvedores, mantendo o `Start.bat` como entrypoint principal de uso no Windows.
