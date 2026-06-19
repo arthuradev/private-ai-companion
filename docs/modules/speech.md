@@ -14,8 +14,29 @@ Gerencia microfone, VAD, STT, TTS, fila de fala, audio player e interrupção.
 - Eventos `TTSRequested`, `SpeechStarted`, `SpeechFinished` e
   `SpeechInterrupted`.
 
-Ainda não há STT, VAD, reprodução de áudio real ou provider externo de TTS.
-Esses itens continuam para fases futuras.
+Ainda não há reprodução de áudio real ou provider externo de TTS. Esses itens
+continuam para fases futuras.
+
+## Implementado na Fase 08
+
+- Contratos `STTProvider`, `VoiceActivityDetector` e `PushToTalkRecorder`.
+- Modelos tipados para clipe de entrada, request/result de STT, segmentos,
+  resultado de VAD e resultado de entrada por voz.
+- `VoiceInputService` para processar clipes explícitos, aplicar VAD opcional,
+  transcrever e publicar eventos sem carregar bytes de áudio nos eventos.
+- `VoiceInteractionService` para transformar transcrição de voz em turno normal
+  de texto.
+- Adapter `FakeSTTProvider` local e determinístico.
+- Adapter `FasterWhisperSTTProvider` opt-in, com import preguiçoso de
+  `faster-whisper`.
+- `EnergyVoiceActivityDetector` simples para testes e bootstrap.
+- CLI `--voice-file` para validar entrada por voz a partir de arquivo explícito.
+- Eventos `VoiceInputStarted`, `UserSpeechReceived`, `VoiceInputIgnored` e
+  `VoiceInputFinished`.
+
+O microfone real permanece desabilitado por padrão. A Fase 08 não introduz
+captura contínua de áudio; o fluxo atual processa clipes explícitos e mantém a
+captura real de microfone para uma evolução futura controlada por policy/config.
 
 ## Regras
 

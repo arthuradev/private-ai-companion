@@ -24,6 +24,14 @@ Gerencia turnos de conversa, entrada/saída, interrupção, roteamento de texto/
 - O provider padrão é fake/local e não chama rede.
 - Providers externos reais continuam desabilitados e planejados.
 
+## Atualizado na Fase 08
+
+- `VoiceInteractionService` recebe resultado de `VoiceInputService`.
+- Transcrições aceitas por STT são convertidas em turnos normais de texto.
+- Entradas de voz ignoradas por VAD, STT desabilitado ou transcrição vazia não
+  chamam o fluxo de resposta.
+- A UI não importa `speech/`; ela chama métodos públicos da aplicação.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

@@ -23,3 +23,7 @@ O usuário deve controlar quais dados são salvos, enviados e usados.
 - Dados sensíveis redigidos em logs.
 - Screenshots temporários por padrão.
 - Memória permanente editável e apagável.
+- Entrada de voz na Fase 08 processa apenas clipes explícitos.
+- Microfone real permanece desabilitado por padrão.
+- Eventos de voz não devem carregar bytes de áudio.
+- Transcrições devem ser tratadas como dados privados.

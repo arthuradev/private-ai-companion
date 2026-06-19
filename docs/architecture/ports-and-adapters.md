@@ -65,3 +65,23 @@ src/private_ai_companion/adapters/speech/fake_audio.py
 ```
 
 Eles não chamam APIs externas e não acessam dispositivo de áudio real.
+
+## Estado na Fase 08
+
+A Fase 08 adiciona os ports de entrada de voz:
+
+- `STTProvider`;
+- `VoiceActivityDetector`;
+- `PushToTalkRecorder`.
+
+Adapters concretos:
+
+```text
+src/private_ai_companion/adapters/speech/fake_stt.py
+src/private_ai_companion/adapters/speech/faster_whisper_stt.py
+src/private_ai_companion/adapters/speech/simple_vad.py
+```
+
+`FakeSTTProvider` e `EnergyVoiceActivityDetector` são locais e determinísticos.
+`FasterWhisperSTTProvider` é opt-in e importa `faster-whisper` apenas quando o
+provider é usado. O core não conhece `faster-whisper`.

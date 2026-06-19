@@ -37,6 +37,14 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
   `SpeechInterrupted`.
 - Interrupção de fala com limpeza da fila e cancelamento do item atual.
 - Configuração versionável de speech em `configs/speech.default.toml`.
+- STT fake local para testes e desenvolvimento.
+- Adapter opt-in para `faster-whisper` com import preguiçoso.
+- VAD simples por energia de bytes para clipes explícitos.
+- Entrada por voz com eventos `VoiceInputStarted`, `UserSpeechReceived`,
+  `VoiceInputIgnored` e `VoiceInputFinished`.
+- CLI `--voice-file` para validar transcrição de arquivo explícito sem captura
+  contínua de microfone.
+- Extra opcional `stt` para instalar `faster-whisper`.
 
 ### Changed
 

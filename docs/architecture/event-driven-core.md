@@ -19,7 +19,10 @@ Separar entrada, processamento e saída usando eventos internos.
 - `AppStopping`
 - `AppStopped`
 - `UserTextReceived`
+- `VoiceInputStarted`
 - `UserSpeechReceived`
+- `VoiceInputIgnored`
+- `VoiceInputFinished`
 - `AssistantResponseRequested`
 - `AssistantTextReady`
 - `TTSRequested`
@@ -71,4 +74,15 @@ A Fase 07 adiciona os eventos de fala:
 - `SpeechInterrupted`.
 
 Esses eventos são usados pela fila de fala e pelo fluxo fake de TTS/playback.
-Entrada por voz ainda fica para a Fase 08.
+
+## Estado na Fase 08
+
+A Fase 08 adiciona os eventos de entrada de voz:
+
+- `VoiceInputStarted`;
+- `UserSpeechReceived`;
+- `VoiceInputIgnored`;
+- `VoiceInputFinished`.
+
+`UserSpeechReceived` carrega a transcrição e deve usar sensibilidade `private`.
+Eventos de ciclo de voz não carregam bytes de áudio.

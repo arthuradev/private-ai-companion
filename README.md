@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 03:
+Este repositório já possui a base implementada até a Fase 08:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -43,8 +43,11 @@ Este repositório já possui a base implementada até a Fase 03:
 - LLM router com provider fake local e providers locais/cloud planejados;
 - memória local SQLite com policy e revisão explícita;
 - TTS fake local, fila de fala, audio player fake e interrupção testável;
+- STT fake local, VAD simples, entrada por voz a partir de clipe explícito e
+  adapter opt-in para `faster-whisper`;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade, runtime, interação por texto, prompt, LLM router, memória, speech, config, CLI, segurança e boundaries arquiteturais.
+- testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
+  memória, speech, config, CLI, segurança e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -130,6 +133,24 @@ configs/speech.default.toml
 
 A Fase 07 implementa TTS fake local, fila de fala e interrupção. A conversa
 ainda não reproduz áudio real automaticamente.
+
+A Fase 08 implementa entrada por voz a partir de um clipe explícito, VAD simples,
+STT fake local e adapter `faster-whisper` opt-in. O microfone real permanece
+desabilitado por padrão e não há captura contínua de áudio.
+
+Para validar o fluxo de voz fake com um arquivo de texto usado como transcrição:
+
+```text
+uv run private-ai-companion --voice-file caminho/para/voice.txt
+```
+
+Para usar `faster-whisper`, instale o extra opcional e altere
+`speech.stt.provider_id` para `faster-whisper` em `configs/speech.default.toml`
+ou em um arquivo de configuração próprio:
+
+```text
+uv sync --extra stt
+```
 
 Validações atuais:
 

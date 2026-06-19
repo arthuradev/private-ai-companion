@@ -68,6 +68,11 @@ Na Fase 07, o launcher também pode repassar `--speech-config`. A configuração
 TTS, fila e playback continua no bootstrap Python e no módulo `speech/`; o
 `Start.bat` não contém lógica de áudio.
 
+Na Fase 08, o launcher também pode repassar `--voice-file` para validar entrada
+por voz a partir de um arquivo explícito. A transcrição, VAD e seleção de STT
+continuam no bootstrap Python, `interaction/` e `speech/`; o `Start.bat` não
+captura microfone nem chama `faster-whisper` diretamente.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:
