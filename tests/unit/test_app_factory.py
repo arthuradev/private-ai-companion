@@ -7,6 +7,7 @@ from private_ai_companion.avatar import AvatarExpression, AvatarProviderStatus
 from private_ai_companion.bootstrap import Application, create_application
 from private_ai_companion.core import RuntimePhase
 from private_ai_companion.safety import ActionExecutionStatus
+from private_ai_companion.skills import SkillRunStatus
 
 
 def test_create_application_wires_core_runtime() -> None:
@@ -20,6 +21,11 @@ def test_create_application_wires_core_runtime() -> None:
     assert application.vision.capture_provider_id == "fake-screen-capture"
     assert application.vision.vision_provider_id == "fake-vision"
     assert application.desktop_actions.executor_id == "safe-local-desktop"
+    assert application.skills.skill_ids == (
+        "builtin.status",
+        "builtin.local_note",
+        "builtin.open_allowed_app",
+    )
 
     snapshot = asyncio.run(application.run_once())
 
@@ -74,3 +80,12 @@ def test_application_performs_confirmed_desktop_action() -> None:
 
     assert result.status is ActionExecutionStatus.EXECUTED
     assert result.output["title"] == "Private AI Companion"
+
+
+def test_application_runs_status_skill() -> None:
+    application = create_application(name="test-app", version="0.0.0")
+
+    result = asyncio.run(application.run_skill(skill_id="builtin.status"))
+
+    assert result.status is SkillRunStatus.COMPLETED
+    assert result.output["status"] == "ready"

@@ -48,6 +48,14 @@ from private_ai_companion.config.providers_config import (
     ProvidersConfigError,
     load_providers_config,
 )
+from private_ai_companion.config.skills_config import (
+    DEFAULT_SKILLS_CONFIG_PATH,
+    SkillConfig,
+    SkillsConfig,
+    SkillsConfigError,
+    default_skills_config,
+    load_skills_config,
+)
 from private_ai_companion.config.speech_config import (
     DEFAULT_SPEECH_CONFIG_PATH,
     PlaybackConfig,
@@ -66,6 +74,7 @@ __all__ = [
     "DEFAULT_PERSONA_CONFIG_PATH",
     "DEFAULT_PRIVACY_CONFIG_PATH",
     "DEFAULT_PROVIDERS_CONFIG_PATH",
+    "DEFAULT_SKILLS_CONFIG_PATH",
     "DEFAULT_SPEECH_CONFIG_PATH",
     "AvatarConfig",
     "AvatarConfigError",
@@ -92,6 +101,9 @@ __all__ = [
     "RedactionConfig",
     "STTConfig",
     "ScreenCaptureConfig",
+    "SkillConfig",
+    "SkillsConfig",
+    "SkillsConfigError",
     "SpeechConfig",
     "SpeechConfigError",
     "SpeechInputConfig",
@@ -100,11 +112,13 @@ __all__ = [
     "VisionProviderConfig",
     "default_desktop_config",
     "default_privacy_config",
+    "default_skills_config",
     "load_avatar_config",
     "load_desktop_config",
     "load_memory_config",
     "load_persona_profile",
     "load_privacy_config",
     "load_providers_config",
+    "load_skills_config",
     "load_speech_config",
 ]

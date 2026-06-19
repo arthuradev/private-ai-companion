@@ -157,6 +157,39 @@ class RichCliApp:
         finally:
             await self._application.stop(reason="cli_desktop_action_finished")
 
+    async def run_skill(
+        self,
+        *,
+        skill_id: str,
+        skill_input: dict[str, str],
+        user_confirmed: bool,
+        dry_run_only: bool,
+    ) -> int:
+        self._render_startup()
+        await self._application.start()
+        try:
+            result = await self._application.run_skill(
+                skill_id=skill_id,
+                skill_input=skill_input,
+                user_confirmed=user_confirmed,
+                dry_run_only=dry_run_only,
+            )
+            self._console.print(
+                "[bold cyan]Skill:[/bold cyan] "
+                f"{result.skill_id} ({result.status.value})"
+            )
+            self._console.print(f"[bold blue]Mensagem:[/bold blue] {result.message}")
+            for key, value in sorted(result.output.items()):
+                self._console.print(f"[bold blue]{key}:[/bold blue] {value}")
+            for effect in result.effects:
+                self._console.print(
+                    "[bold blue]Effect:[/bold blue] "
+                    f"{effect.kind.value} {effect.status} - {effect.message}"
+                )
+            return 0
+        finally:
+            await self._application.stop(reason="cli_skill_finished")
+
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")
         self._console.print(Text(figlet.renderText(PROJECT_NAME), style="bold cyan"))

@@ -200,3 +200,25 @@ class AuditEventCreated(BaseEvent):
     risk: str = ""
     decision: str = ""
     outcome: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class SkillInvoked(BaseEvent):
+    skill_id: str = ""
+    request_id: str = ""
+    source: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class SkillDenied(BaseEvent):
+    skill_id: str = ""
+    request_id: str = ""
+    reason: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class SkillCompleted(BaseEvent):
+    skill_id: str = ""
+    request_id: str = ""
+    status: str = ""
+    effect_count: int = 0

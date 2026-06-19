@@ -21,6 +21,7 @@ from private_ai_companion.interaction import (
     VoiceInteractionService,
     VoiceTurn,
 )
+from private_ai_companion.skills import SkillManager, SkillRequest, SkillRunResult
 from private_ai_companion.speech import SpeechInputAudio, SpeechQueueService
 from private_ai_companion.vision import (
     ScreenCaptureRequest,
@@ -40,6 +41,7 @@ class Application:
     avatar: AvatarService
     vision: VisionService
     desktop_actions: DesktopActionService
+    skills: SkillManager
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()
@@ -103,5 +105,24 @@ class Application:
                 source=source,
                 user_confirmed=user_confirmed,
                 dry_run_only=dry_run_only,
+            )
+        )
+
+    async def run_skill(
+        self,
+        *,
+        skill_id: str,
+        skill_input: dict[str, str] | None = None,
+        user_confirmed: bool = False,
+        dry_run_only: bool = False,
+        source: str = "manual_cli_request",
+    ) -> SkillRunResult:
+        return await self.skills.run(
+            SkillRequest(
+                skill_id=skill_id,
+                input=skill_input or {},
+                user_confirmed=user_confirmed,
+                dry_run_only=dry_run_only,
+                source=source,
             )
         )

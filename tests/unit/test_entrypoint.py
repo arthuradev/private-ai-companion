@@ -86,6 +86,37 @@ def test_entrypoint_desktop_action_dry_run_returns_success(
     assert "Open allowed app 'Calculator'" in captured.out
 
 
+def test_entrypoint_skill_status_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(("--skill", "builtin.status")) == 0
+
+    captured = capsys.readouterr()
+    assert "Skill: builtin.status (completed)" in captured.out
+    assert "status: ready" in captured.out
+
+
+def test_entrypoint_skill_effect_dry_run_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert (
+        main(
+            (
+                "--skill",
+                "builtin.open_allowed_app",
+                "--skill-input",
+                "app_id=calculator",
+                "--skill-dry-run",
+            )
+        )
+        == 0
+    )
+
+    captured = capsys.readouterr()
+    assert "Skill: builtin.open_allowed_app (completed)" in captured.out
+    assert "Effect: desktop_action dry_run" in captured.out
+
+
 def test_entrypoint_rejects_multiple_single_actions(tmp_path: Path) -> None:
     voice_file = tmp_path / "voice.txt"
     voice_file.write_text("hello voice", encoding="utf-8")
@@ -117,8 +148,22 @@ def test_entrypoint_rejects_text_and_desktop_action_together() -> None:
     assert error.value.code == 2
 
 
+def test_entrypoint_rejects_text_and_skill_together() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--once", "hello", "--skill", "builtin.status"))
+
+    assert error.value.code == 2
+
+
 def test_entrypoint_rejects_create_note_without_title() -> None:
     with pytest.raises(SystemExit) as error:
         main(("--desktop-action", "create-note"))
+
+    assert error.value.code == 2
+
+
+def test_entrypoint_rejects_malformed_skill_input() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--skill", "builtin.status", "--skill-input", "broken"))
 
     assert error.value.code == 2

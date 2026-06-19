@@ -96,3 +96,41 @@ def test_cli_desktop_action_renders_dry_run() -> None:
     assert exit_code == 0
     assert "Acao desktop: dry_run (medium)" in output
     assert "Open allowed app 'Calculator'" in output
+
+
+def test_cli_skill_renders_status() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(
+        cli.run_skill(
+            skill_id="builtin.status",
+            skill_input={},
+            user_confirmed=False,
+            dry_run_only=False,
+        )
+    )
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Skill: builtin.status (completed)" in output
+    assert "status: ready" in output
+
+
+def test_cli_skill_renders_effect_dry_run() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(
+        cli.run_skill(
+            skill_id="builtin.open_allowed_app",
+            skill_input={"app_id": "calculator"},
+            user_confirmed=False,
+            dry_run_only=True,
+        )
+    )
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Skill: builtin.open_allowed_app (completed)" in output
+    assert "Effect: desktop_action dry_run" in output

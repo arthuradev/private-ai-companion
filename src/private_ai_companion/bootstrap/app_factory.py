@@ -30,6 +30,7 @@ from private_ai_companion.avatar import (
     AvatarServiceSettings,
 )
 from private_ai_companion.bootstrap.application import Application
+from private_ai_companion.bootstrap.skill_effects import DesktopSkillEffectExecutor
 from private_ai_companion.brain import LLMProvider, LLMProviderKind, LLMRouter
 from private_ai_companion.config import (
     AvatarConfig,
@@ -37,12 +38,14 @@ from private_ai_companion.config import (
     DesktopConfig,
     LLMProviderConfig,
     PrivacyConfig,
+    SkillsConfig,
     SpeechConfig,
     load_avatar_config,
     load_desktop_config,
     load_persona_profile,
     load_privacy_config,
     load_providers_config,
+    load_skills_config,
     load_speech_config,
 )
 from private_ai_companion.core.event_bus import EventBus
@@ -63,6 +66,14 @@ from private_ai_companion.safety import (
     InMemoryActionAuditLog,
     RiskClassifier,
     RiskLevel,
+)
+from private_ai_companion.skills import (
+    LocalNoteSkill,
+    OpenAllowedAppSkill,
+    SkillManager,
+    SkillPolicy,
+    SkillRegistry,
+    StatusSkill,
 )
 from private_ai_companion.speech import (
     AudioPlayer,
@@ -92,6 +103,7 @@ class ApplicationConfigPaths:
     avatar: Path | None = None
     privacy: Path | None = None
     desktop: Path | None = None
+    skills: Path | None = None
 
 
 def create_application(
@@ -109,6 +121,7 @@ def create_application(
     avatar_config = load_avatar_config(paths.avatar)
     privacy_config = load_privacy_config(paths.privacy)
     desktop_config = load_desktop_config(paths.desktop)
+    skills_config = load_skills_config(paths.skills)
     providers = _build_llm_providers(providers_config.llm.enabled_providers)
     llm_router = LLMRouter(
         providers=providers,
@@ -171,6 +184,12 @@ def create_application(
         permission_policy=_build_desktop_permission_policy(desktop_config),
         audit_log=InMemoryActionAuditLog(),
     )
+    skills = SkillManager(
+        event_bus=event_bus,
+        registry=_build_skill_registry(),
+        policy=_build_skill_policy(skills_config),
+        effect_executor=DesktopSkillEffectExecutor(desktop_actions=desktop_actions),
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
@@ -181,6 +200,7 @@ def create_application(
         avatar=avatar,
         vision=vision,
         desktop_actions=desktop_actions,
+        skills=skills,
     )
 
 
@@ -379,4 +399,30 @@ def _build_desktop_permission_policy(
         allowed_app_ids=tuple(desktop_config.allowed_apps),
         notes_enabled=desktop_config.notes.enabled,
         active_window_title_enabled=desktop_config.window.active_window_title_enabled,
+    )
+
+
+def _build_skill_registry() -> SkillRegistry:
+    registry = SkillRegistry()
+    registry.register(StatusSkill())
+    registry.register(LocalNoteSkill())
+    registry.register(OpenAllowedAppSkill())
+    return registry
+
+
+def _build_skill_policy(skills_config: SkillsConfig) -> SkillPolicy:
+    enabled_skill_ids = tuple(
+        skill.skill_id for skill in skills_config.skills if skill.enabled
+    )
+    permissions_by_skill_id = {
+        skill.skill_id: skill.permissions for skill in skills_config.skills
+    }
+    allowed_actions_by_skill_id = {
+        skill.skill_id: skill.allowed_action_types for skill in skills_config.skills
+    }
+    return SkillPolicy(
+        enabled=skills_config.enabled,
+        enabled_skill_ids=enabled_skill_ids,
+        permissions_by_skill_id=permissions_by_skill_id,
+        allowed_actions_by_skill_id=allowed_actions_by_skill_id,
     )

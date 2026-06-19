@@ -1,0 +1,20 @@
+[skills]
+enabled = true
+
+[[skills.skill]]
+skill_id = "builtin.status"
+enabled = true
+permissions = ["status.read"]
+allowed_action_types = []
+
+[[skills.skill]]
+skill_id = "builtin.local_note"
+enabled = true
+permissions = ["desktop.action"]
+allowed_action_types = ["desktop.create_note"]
+
+[[skills.skill]]
+skill_id = "builtin.open_allowed_app"
+enabled = true
+permissions = ["desktop.action"]
+allowed_action_types = ["desktop.open_allowed_app"]

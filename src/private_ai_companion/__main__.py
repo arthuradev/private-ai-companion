@@ -68,6 +68,11 @@ def build_parser() -> ArgumentParser:
         help="path to a desktop actions TOML config file",
     )
     parser.add_argument(
+        "--skills-config",
+        type=Path,
+        help="path to a skills TOML config file",
+    )
+    parser.add_argument(
         "--avatar-expression",
         choices=[expression.value for expression in AvatarExpression],
         help="apply one avatar expression and exit",
@@ -110,6 +115,26 @@ def build_parser() -> ArgumentParser:
         "--app-id",
         help="allowlisted app id for --desktop-action open-allowed-app",
     )
+    parser.add_argument(
+        "--skill",
+        help="run one enabled skill by id and exit",
+    )
+    parser.add_argument(
+        "--skill-input",
+        action="append",
+        metavar="KEY=VALUE",
+        help="input pair for --skill; may be passed more than once",
+    )
+    parser.add_argument(
+        "--skill-confirm",
+        action="store_true",
+        help="confirm one policy-gated skill effect",
+    )
+    parser.add_argument(
+        "--skill-dry-run",
+        action="store_true",
+        help="run one skill effect in dry-run mode",
+    )
     return parser
 
 
@@ -128,18 +153,27 @@ def main(argv: Sequence[str] | None = None) -> int:
             options.avatar_expression is not None,
             bool(options.screen_context),
             options.desktop_action is not None,
+            options.skill is not None,
         )
     )
     if single_action_count > 1:
         parser.error(
             "--once, --voice-file, --avatar-expression, --screen-context and "
-            "--desktop-action are exclusive"
+            "--desktop-action/--skill are exclusive"
         )
 
     if options.desktop_action == "create-note" and not options.note_title:
         parser.error("--desktop-action create-note requires --note-title")
     if options.desktop_action == "open-allowed-app" and not options.app_id:
         parser.error("--desktop-action open-allowed-app requires --app-id")
+    try:
+        skill_input = (
+            _parse_key_value_options(options.skill_input)
+            if options.skill is not None
+            else {}
+        )
+    except ValueError as error:
+        parser.error(str(error))
 
     cli = RichCliApp(
         application=create_application(
@@ -150,13 +184,18 @@ def main(argv: Sequence[str] | None = None) -> int:
                 avatar=options.avatar_config,
                 privacy=options.privacy_config,
                 desktop=options.desktop_config,
+                skills=options.skills_config,
             ),
         )
     )
-    return _run_cli_action(cli, options)
+    return _run_cli_action(cli, options, skill_input)
 
 
-def _run_cli_action(cli: RichCliApp, options: Namespace) -> int:
+def _run_cli_action(
+    cli: RichCliApp,
+    options: Namespace,
+    skill_input: dict[str, str],
+) -> int:
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
     if options.voice_file is not None:
@@ -167,6 +206,17 @@ def _run_cli_action(cli: RichCliApp, options: Namespace) -> int:
         )
     if options.screen_context:
         return asyncio.run(cli.run_screen_context(str(options.screen_purpose)))
+    if options.desktop_action is not None or options.skill is not None:
+        return _run_tool_action(cli, options, skill_input)
+
+    return asyncio.run(cli.run_interactive())
+
+
+def _run_tool_action(
+    cli: RichCliApp,
+    options: Namespace,
+    skill_input: dict[str, str],
+) -> int:
     if options.desktop_action is not None:
         parameters: dict[str, str] = {}
         if options.desktop_action == "create-note":
@@ -184,8 +234,26 @@ def _run_cli_action(cli: RichCliApp, options: Namespace) -> int:
                 dry_run_only=bool(options.desktop_dry_run),
             )
         )
+    if options.skill is not None:
+        return asyncio.run(
+            cli.run_skill(
+                skill_id=str(options.skill),
+                skill_input=skill_input,
+                user_confirmed=bool(options.skill_confirm),
+                dry_run_only=bool(options.skill_dry_run),
+            )
+        )
+    raise ValueError("expected desktop action or skill option")
 
-    return asyncio.run(cli.run_interactive())
+
+def _parse_key_value_options(values: Sequence[str] | None) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    for value in values or ():
+        key, separator, item_value = value.partition("=")
+        if not separator or not key.strip():
+            raise ValueError("--skill-input values must use KEY=VALUE")
+        parsed[key.strip()] = item_value
+    return parsed
 
 
 if __name__ == "__main__":
