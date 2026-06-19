@@ -35,6 +35,11 @@ def build_parser() -> ArgumentParser:
         type=Path,
         help="path to a providers TOML config file",
     )
+    parser.add_argument(
+        "--speech-config",
+        type=Path,
+        help="path to a speech TOML config file",
+    )
     return parser
 
 
@@ -50,6 +55,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         application=create_application(
             persona_config_path=options.persona_config,
             providers_config_path=options.providers_config,
+            speech_config_path=options.speech_config,
         )
     )
     if options.once is not None:

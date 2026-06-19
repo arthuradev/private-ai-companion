@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from private_ai_companion.brain import LLMRouter, PersonaProfile
 from private_ai_companion.core.orchestrator import CoreOrchestrator, RuntimeSnapshot
 from private_ai_companion.interaction import TextInteractionService, TextTurn
+from private_ai_companion.speech import SpeechQueueService
 
 
 @dataclass(frozen=True, slots=True)
@@ -13,6 +14,7 @@ class Application:
     text_interaction: TextInteractionService
     persona: PersonaProfile
     llm_router: LLMRouter
+    speech_queue: SpeechQueueService
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()

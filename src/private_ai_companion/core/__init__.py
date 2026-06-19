@@ -7,6 +7,10 @@ from private_ai_companion.core.events import (
     BaseEvent,
     EventMetadata,
     EventSensitivity,
+    SpeechFinished,
+    SpeechInterrupted,
+    SpeechStarted,
+    TTSRequested,
     UserTextReceived,
 )
 from private_ai_companion.core.lifecycle import ApplicationIdentity, LifecycleManager
@@ -34,6 +38,10 @@ __all__ = [
     "RuntimeSnapshot",
     "RuntimeState",
     "RuntimeStateStore",
+    "SpeechFinished",
+    "SpeechInterrupted",
+    "SpeechStarted",
     "Subscription",
+    "TTSRequested",
     "UserTextReceived",
 ]

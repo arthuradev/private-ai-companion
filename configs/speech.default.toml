@@ -1,0 +1,10 @@
+[speech.tts]
+provider_id = "fake-tts"
+voice_id = "default"
+language = "pt-BR"
+audio_format = "text/plain"
+enabled = true
+
+[speech.playback]
+enabled = false
+interrupt_on_new_input = true

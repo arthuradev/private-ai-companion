@@ -55,3 +55,26 @@ class UserTextReceived(BaseEvent):
 @dataclass(frozen=True, slots=True)
 class AssistantTextReady(BaseEvent):
     text: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class TTSRequested(BaseEvent):
+    text: str = ""
+    voice_id: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class SpeechStarted(BaseEvent):
+    item_id: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class SpeechFinished(BaseEvent):
+    item_id: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class SpeechInterrupted(BaseEvent):
+    reason: str = "interrupted"
+    interrupted_item_id: str | None = None
+    cleared_items: int = 0

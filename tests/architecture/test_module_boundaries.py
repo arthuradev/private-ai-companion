@@ -54,6 +54,15 @@ FORBIDDEN_MEMORY_IMPORT_PREFIXES = (
     "private_ai_companion.vision",
 )
 
+FORBIDDEN_SPEECH_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
+    "private_ai_companion.brain",
+    "private_ai_companion.desktop",
+    "private_ai_companion.memory",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
+)
+
 
 def imported_modules(path: Path) -> set[str]:
     modules: set[str] = set()
@@ -108,6 +117,15 @@ def test_memory_does_not_import_runtime_edges_or_brain() -> None:
     violations = forbidden_imports_under(
         PACKAGE_ROOT / "memory",
         FORBIDDEN_MEMORY_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_speech_does_not_import_runtime_edges_or_memory() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "speech",
+        FORBIDDEN_SPEECH_IMPORT_PREFIXES,
     )
 
     assert violations == {}

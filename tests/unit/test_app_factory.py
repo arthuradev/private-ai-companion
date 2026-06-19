@@ -12,6 +12,7 @@ def test_create_application_wires_core_runtime() -> None:
     assert isinstance(application, Application)
     assert application.orchestrator.state.phase is RuntimePhase.CREATED
     assert application.llm_router.provider_ids == ("fake-local",)
+    assert application.speech_queue.pending_count == 0
 
     snapshot = asyncio.run(application.run_once())
 
