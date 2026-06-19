@@ -4,6 +4,19 @@
 
 Gerencia SQLite, memória curta/sessão/longa, política de memória, recuperação, sumarização, edição, exclusão e retenção.
 
+## Implementado na Fase 06
+
+- Modelos tipados de candidata, registro, sensibilidade, status e fonte.
+- Policy determinística para decidir entre rejeição, revisão pendente e aprovação.
+- Repository SQLite com schema local.
+- Busca simples em memórias aprovadas.
+- Audit log de decisões sem registrar conteúdo sensível no log.
+- Serviço de revisão para aprovar, rejeitar, editar e apagar memórias.
+- Redação de candidatas sensíveis rejeitadas antes de persistir.
+
+A conversa por texto ainda não grava memórias automaticamente. Integrações com
+sumarização, recuperação semântica e UI de revisão ficam para fases futuras.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

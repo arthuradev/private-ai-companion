@@ -28,6 +28,10 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Provider fake local para testes e desenvolvimento.
 - Configuração versionável de providers em `configs/providers.default.toml`.
 - Providers locais/cloud planejados, desabilitados por padrão e sem segredos.
+- Memória local SQLite com repository, schema e audit log de decisões.
+- Policy de memória com rejeição padrão de conteúdo sensível.
+- Serviço de revisão para aprovar, rejeitar, editar e apagar memórias.
+- Configuração versionável de memória em `configs/memory.default.toml`.
 
 ### Changed
 
