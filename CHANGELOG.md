@@ -20,6 +20,10 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - CLI inicial com Rich/Pyfiglet.
 - Conversa por texto local da Fase 03, sem LLM ou memória permanente.
 - Eventos `UserTextReceived` e `AssistantTextReady`.
+- Persona configurável por `configs/persona.default.toml`.
+- Loader tipado de configuração de persona.
+- Context builder e prompt builder estruturado.
+- Testes de prompt, persona config e boundaries de `brain`/`config`.
 
 ### Changed
 

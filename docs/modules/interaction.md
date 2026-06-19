@@ -9,7 +9,14 @@ Gerencia turnos de conversa, entrada/saída, interrupção, roteamento de texto/
 - Serviço de interação por texto.
 - Turno local com mensagem do usuário e resposta da companion.
 - Publicação dos eventos `UserTextReceived` e `AssistantTextReady`.
-- Responder local temporário da Fase 03, sem LLM, prompt builder ou memória.
+- Responder local temporário da Fase 03, sem LLM ou memória.
+
+## Atualizado na Fase 04
+
+- Cada turno de texto passa pelo context builder e prompt builder.
+- A resposta local usa a persona carregada para exibir o nome configurado.
+- O prompt é montado internamente para testes e futura integração com LLM, mas
+  ainda não é enviado para provider externo.
 
 ## Regras
 

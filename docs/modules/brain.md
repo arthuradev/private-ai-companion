@@ -4,6 +4,16 @@
 
 Contém persona, prompt builder, context builder, LLM router, response planner e emotion planner. Não executa ações locais.
 
+## Implementado na Fase 04
+
+- Modelo tipado de persona.
+- Persona padrão segura e configurável.
+- Context builder para mensagens de texto.
+- Prompt builder estruturado com mensagens `system` e `user`.
+- Marcação no prompt de que conteúdo do usuário é dado não confiável.
+
+LLM router, response planner e emotion planner continuam para fases futuras.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

@@ -38,8 +38,10 @@ Este repositório já possui a base implementada até a Fase 03:
 - entrypoint oficial `private-ai-companion`;
 - runtime central com event bus, lifecycle, orquestrador e estado;
 - CLI inicial com Rich/Pyfiglet e conversa por texto local;
+- persona configurável por TOML;
+- context builder e prompt builder testáveis;
 - `Start.bat` inicial para usuários Windows;
-- testes de sanidade, runtime, interação por texto, CLI e boundary arquitetural inicial.
+- testes de sanidade, runtime, interação por texto, prompt, config, CLI e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -90,6 +92,12 @@ Para executar uma única mensagem e encerrar, útil para validação:
 
 ```text
 uv run private-ai-companion --once "olá"
+```
+
+Para usar um arquivo de persona específico:
+
+```text
+uv run private-ai-companion --persona-config configs/persona.default.toml
 ```
 
 Validações atuais:

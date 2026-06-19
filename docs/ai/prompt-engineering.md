@@ -31,6 +31,18 @@ Define como o LLM deve produzir intenções estruturadas, sem executar ações d
 
 O projeto deve oferecer uma personalidade padrão carinhosa/próxima, mas permitir substituição por configuração.
 
+## Implementado na Fase 04
+
+O prompt builder gera uma estrutura testável com:
+
+- mensagem `system` contendo persona, tom, estilo, proatividade e limites;
+- mensagem `user` contendo o contexto do turno;
+- aviso explícito de que conteúdo do usuário é dado não confiável;
+- texto renderizado por `PromptBundle.as_text()` para snapshots e depuração.
+
+O prompt builder não executa ações, não decide segurança e não chama providers
+externos.
+
 ## Evitar
 
 - Prompt gigante impossível de testar.

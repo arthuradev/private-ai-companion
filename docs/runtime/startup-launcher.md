@@ -56,6 +56,10 @@ Rich/Pyfiglet. O usuário vê o banner `private-ai-companion` ao iniciar pelo
 `Start.bat` e pode conversar por texto usando a resposta local temporária da
 fase.
 
+Na Fase 04, o launcher também pode repassar `--persona-config` para o entrypoint
+oficial. A leitura e validação do arquivo continuam no bootstrap Python, não no
+`Start.bat`.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:
