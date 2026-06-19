@@ -1,0 +1,35 @@
+# CHANGELOG.md
+
+Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
+
+## [Unreleased]
+
+### Added
+
+- Base documental inicial do projeto.
+- Planejamento de arquitetura modular.
+- Plano de fases para implementação pelo Codex.
+- Políticas iniciais de segurança, privacidade, memória e ações.
+- ADRs iniciais.
+
+### Changed
+
+- Nenhuma mudança ainda.
+
+### Fixed
+
+- Nenhuma correção ainda.
+
+## Versionamento planejado
+
+- `v0.1.0`: primeira versão funcional com conversa, voz, memória e avatar.
+- `v0.2.0`: visão de tela, ações locais seguras e skills iniciais.
+- `v0.3.0`: dashboard/tray, empacotamento e hardening.
+- `v1.0.0`: versão estável pública após auditoria, documentação completa e segurança revisada.
+
+## [Documentação] — Requisito de Start.bat
+
+- Registrado requisito de launcher amigável para usuários Windows.
+- Adicionado ADR sobre `Start.bat` como entrypoint operacional.
+- Adicionada documentação de startup e launcher em `docs/runtime/startup-launcher.md`.
+- Atualizadas fases de fundação, CLI e release para validar inicialização sem comandos técnicos.
