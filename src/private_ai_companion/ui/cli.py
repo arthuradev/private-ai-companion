@@ -12,6 +12,8 @@ from rich.text import Text
 from private_ai_companion import PROJECT_NAME
 from private_ai_companion.avatar import AvatarExpression
 from private_ai_companion.bootstrap import Application
+from private_ai_companion.ui.dashboard import RichDashboardApp
+from private_ai_companion.ui.tray import RichTrayStatusApp
 
 InputReader = Callable[[str], str]
 
@@ -189,6 +191,18 @@ class RichCliApp:
             return 0
         finally:
             await self._application.stop(reason="cli_skill_finished")
+
+    async def run_dashboard(self) -> int:
+        return await RichDashboardApp(
+            application=self._application,
+            console=self._console,
+        ).run_once()
+
+    async def run_tray_status(self) -> int:
+        return await RichTrayStatusApp(
+            application=self._application,
+            console=self._console,
+        ).run_once()
 
     def _render_startup(self) -> None:
         figlet = Figlet(font="small")

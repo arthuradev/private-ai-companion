@@ -37,11 +37,13 @@ from private_ai_companion.config import (
     ConfigError,
     DesktopConfig,
     LLMProviderConfig,
+    MemoryConfig,
     PrivacyConfig,
     SkillsConfig,
     SpeechConfig,
     load_avatar_config,
     load_desktop_config,
+    load_memory_config,
     load_persona_profile,
     load_privacy_config,
     load_providers_config,
@@ -60,6 +62,11 @@ from private_ai_companion.desktop import (
 from private_ai_companion.interaction import (
     TextInteractionService,
     VoiceInteractionService,
+)
+from private_ai_companion.memory import (
+    MemoryPolicy,
+    MemoryReviewService,
+    SQLiteMemoryRepository,
 )
 from private_ai_companion.safety import (
     ActionPolicy,
@@ -99,6 +106,7 @@ from private_ai_companion.vision import (
 class ApplicationConfigPaths:
     persona: Path | None = None
     providers: Path | None = None
+    memory: Path | None = None
     speech: Path | None = None
     avatar: Path | None = None
     privacy: Path | None = None
@@ -117,6 +125,7 @@ def create_application(
     state_store = RuntimeStateStore()
     persona = load_persona_profile(paths.persona)
     providers_config = load_providers_config(paths.providers)
+    memory_config = load_memory_config(paths.memory)
     speech_config = load_speech_config(paths.speech)
     avatar_config = load_avatar_config(paths.avatar)
     privacy_config = load_privacy_config(paths.privacy)
@@ -184,6 +193,7 @@ def create_application(
         permission_policy=_build_desktop_permission_policy(desktop_config),
         audit_log=InMemoryActionAuditLog(),
     )
+    memory_review = _build_memory_review_service(memory_config)
     skills = SkillManager(
         event_bus=event_bus,
         registry=_build_skill_registry(),
@@ -200,6 +210,7 @@ def create_application(
         avatar=avatar,
         vision=vision,
         desktop_actions=desktop_actions,
+        memory_review=memory_review,
         skills=skills,
     )
 
@@ -224,6 +235,19 @@ def _build_llm_providers(
         )
 
     return tuple(providers)
+
+
+def _build_memory_review_service(memory_config: MemoryConfig) -> MemoryReviewService:
+    return MemoryReviewService(
+        repository=SQLiteMemoryRepository(memory_config.database_path),
+        policy=MemoryPolicy(
+            reject_sensitive_by_default=(
+                memory_config.policy.reject_sensitive_by_default
+            ),
+            auto_approve_low_sensitivity=(memory_config.auto_approve_low_sensitivity),
+            minimum_confidence=memory_config.policy.minimum_confidence,
+        ),
+    )
 
 
 def _build_tts_provider(speech_config: SpeechConfig) -> TTSProvider:

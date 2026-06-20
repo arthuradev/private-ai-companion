@@ -21,6 +21,7 @@ from private_ai_companion.interaction import (
     VoiceInteractionService,
     VoiceTurn,
 )
+from private_ai_companion.memory import MemoryReviewService, MemoryStatus
 from private_ai_companion.skills import SkillManager, SkillRequest, SkillRunResult
 from private_ai_companion.speech import SpeechInputAudio, SpeechQueueService
 from private_ai_companion.vision import (
@@ -41,6 +42,7 @@ class Application:
     avatar: AvatarService
     vision: VisionService
     desktop_actions: DesktopActionService
+    memory_review: MemoryReviewService
     skills: SkillManager
 
     async def start(self) -> RuntimeSnapshot:
@@ -126,3 +128,9 @@ class Application:
                 source=source,
             )
         )
+
+    def memory_status_counts(self) -> dict[str, int]:
+        return {
+            status.value: len(self.memory_review.repository.list_by_status(status))
+            for status in MemoryStatus
+        }

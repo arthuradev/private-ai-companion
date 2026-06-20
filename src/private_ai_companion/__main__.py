@@ -48,6 +48,11 @@ def build_parser() -> ArgumentParser:
         help="path to a providers TOML config file",
     )
     parser.add_argument(
+        "--memory-config",
+        type=Path,
+        help="path to a memory TOML config file",
+    )
+    parser.add_argument(
         "--speech-config",
         type=Path,
         help="path to a speech TOML config file",
@@ -135,6 +140,16 @@ def build_parser() -> ArgumentParser:
         action="store_true",
         help="run one skill effect in dry-run mode",
     )
+    parser.add_argument(
+        "--dashboard",
+        action="store_true",
+        help="show the local dashboard and exit",
+    )
+    parser.add_argument(
+        "--tray-status",
+        action="store_true",
+        help="show the local tray status model and exit",
+    )
     return parser
 
 
@@ -154,12 +169,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             bool(options.screen_context),
             options.desktop_action is not None,
             options.skill is not None,
+            bool(options.dashboard),
+            bool(options.tray_status),
         )
     )
     if single_action_count > 1:
         parser.error(
-            "--once, --voice-file, --avatar-expression, --screen-context and "
-            "--desktop-action/--skill are exclusive"
+            "--once, --voice-file, --avatar-expression, --screen-context, "
+            "--desktop-action, --skill, --dashboard and --tray-status are exclusive"
         )
 
     if options.desktop_action == "create-note" and not options.note_title:
@@ -180,6 +197,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             config_paths=ApplicationConfigPaths(
                 persona=options.persona_config,
                 providers=options.providers_config,
+                memory=options.memory_config,
                 speech=options.speech_config,
                 avatar=options.avatar_config,
                 privacy=options.privacy_config,
@@ -196,6 +214,26 @@ def _run_cli_action(
     options: Namespace,
     skill_input: dict[str, str],
 ) -> int:
+    if _has_interaction_action(options):
+        return _run_interaction_action(cli, options)
+    if options.desktop_action is not None or options.skill is not None:
+        return _run_tool_action(cli, options, skill_input)
+    if options.dashboard or options.tray_status:
+        return _run_local_ui_action(cli, options)
+
+    return asyncio.run(cli.run_interactive())
+
+
+def _has_interaction_action(options: Namespace) -> bool:
+    return (
+        options.once is not None
+        or options.voice_file is not None
+        or options.avatar_expression is not None
+        or bool(options.screen_context)
+    )
+
+
+def _run_interaction_action(cli: RichCliApp, options: Namespace) -> int:
     if options.once is not None:
         return asyncio.run(cli.run_single_turn(str(options.once)))
     if options.voice_file is not None:
@@ -206,10 +244,7 @@ def _run_cli_action(
         )
     if options.screen_context:
         return asyncio.run(cli.run_screen_context(str(options.screen_purpose)))
-    if options.desktop_action is not None or options.skill is not None:
-        return _run_tool_action(cli, options, skill_input)
-
-    return asyncio.run(cli.run_interactive())
+    raise ValueError("expected interaction option")
 
 
 def _run_tool_action(
@@ -244,6 +279,14 @@ def _run_tool_action(
             )
         )
     raise ValueError("expected desktop action or skill option")
+
+
+def _run_local_ui_action(cli: RichCliApp, options: Namespace) -> int:
+    if options.dashboard:
+        return asyncio.run(cli.run_dashboard())
+    if options.tray_status:
+        return asyncio.run(cli.run_tray_status())
+    raise ValueError("expected local UI option")
 
 
 def _parse_key_value_options(values: Sequence[str] | None) -> dict[str, str]:

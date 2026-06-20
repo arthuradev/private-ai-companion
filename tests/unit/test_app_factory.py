@@ -21,6 +21,7 @@ def test_create_application_wires_core_runtime() -> None:
     assert application.vision.capture_provider_id == "fake-screen-capture"
     assert application.vision.vision_provider_id == "fake-vision"
     assert application.desktop_actions.executor_id == "safe-local-desktop"
+    assert "pending_review" in application.memory_status_counts()
     assert application.skills.skill_ids == (
         "builtin.status",
         "builtin.local_note",

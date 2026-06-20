@@ -134,3 +134,27 @@ def test_cli_skill_renders_effect_dry_run() -> None:
     assert exit_code == 0
     assert "Skill: builtin.open_allowed_app (completed)" in output
     assert "Effect: desktop_action dry_run" in output
+
+
+def test_cli_dashboard_renders_local_dashboard() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(cli.run_dashboard())
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Dashboard local" in output
+    assert "Permissoes e acoes locais" in output
+
+
+def test_cli_tray_status_renders_menu() -> None:
+    console = Console(record=True, width=120, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(cli.run_tray_status())
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Tray status" in output
+    assert "Abrir dashboard" in output

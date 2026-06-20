@@ -117,6 +117,26 @@ def test_entrypoint_skill_effect_dry_run_returns_success(
     assert "Effect: desktop_action dry_run" in captured.out
 
 
+def test_entrypoint_dashboard_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(("--dashboard",)) == 0
+
+    captured = capsys.readouterr()
+    assert "Dashboard local" in captured.out
+    assert "Memoria local" in captured.out
+
+
+def test_entrypoint_tray_status_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(("--tray-status",)) == 0
+
+    captured = capsys.readouterr()
+    assert "Tray status" in captured.out
+    assert "Abrir dashboard" in captured.out
+
+
 def test_entrypoint_rejects_multiple_single_actions(tmp_path: Path) -> None:
     voice_file = tmp_path / "voice.txt"
     voice_file.write_text("hello voice", encoding="utf-8")
@@ -151,6 +171,13 @@ def test_entrypoint_rejects_text_and_desktop_action_together() -> None:
 def test_entrypoint_rejects_text_and_skill_together() -> None:
     with pytest.raises(SystemExit) as error:
         main(("--once", "hello", "--skill", "builtin.status"))
+
+    assert error.value.code == 2
+
+
+def test_entrypoint_rejects_text_and_dashboard_together() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--once", "hello", "--dashboard"))
 
     assert error.value.code == 2
 
