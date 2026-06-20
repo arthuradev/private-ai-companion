@@ -42,3 +42,11 @@
 - `SkillRegistry`
 - `SkillManager`
 - `ToolSchemaBuilder`
+
+## UI
+
+- `RichCliApp`
+- `RichDashboardApp`
+- `DashboardSnapshot`
+- `RichTrayStatusApp`
+- `TraySnapshot`

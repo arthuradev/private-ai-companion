@@ -5,6 +5,7 @@
 - Novos STT providers.
 - Avatar próprio via Live2D Web.
 - Overlay transparente.
+- Tray nativo como adapter opcional de UI.
 - Embeddings locais.
 - RAG avançado.
 - Skills da comunidade.

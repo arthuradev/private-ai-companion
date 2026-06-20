@@ -79,3 +79,18 @@ Usuário ou serviço interno solicita skill
 Uma skill não executa comandos diretamente. Quando o efeito representa ação de
 desktop, ele entra no mesmo fluxo de risco, dry-run, confirmação, execução e
 auditoria das ações locais.
+
+## Dashboard e tray local
+
+```text
+Usuário solicita dashboard ou tray status
+→ Entry point oficial
+→ Application bootstrap
+→ DashboardSnapshot
+→ RichDashboardApp ou RichTrayStatusApp
+→ renderização local
+→ shutdown do modo pontual
+```
+
+A UI complementar lê serviços públicos da aplicação e renderiza estado. Ela não
+executa actions, não acessa banco de memória diretamente e não bypassa policy.

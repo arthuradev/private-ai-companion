@@ -37,3 +37,12 @@ Memória automática pode existir, mas deve ser revisável. O usuário deve pode
 - Audit log registra ação, status, motivo e timestamp, não conteúdo integral.
 - Aprovação, rejeição, edição e exclusão exigem chamada explícita ao serviço de
   revisão.
+
+## Estado na Fase 13
+
+O dashboard local mostra contagens por status de memória, como
+`pending_review`, `approved`, `rejected` e `deleted`. Ele não renderiza conteúdo
+de memórias por padrão e não acessa o repositório diretamente a partir de `ui/`.
+
+Revisão detalhada, edição e exclusão continuam passando por
+`MemoryReviewService` e devem permanecer explícitas.

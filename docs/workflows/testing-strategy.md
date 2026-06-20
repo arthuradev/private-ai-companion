@@ -21,6 +21,7 @@
 8. Screen capture policy.
 9. TTS queue interruption.
 10. Avatar state mapping.
+11. Dashboard/tray snapshots sem dados sensíveis.
 
 ## Regra
 

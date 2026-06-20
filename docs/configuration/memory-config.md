@@ -22,6 +22,15 @@ data/memory.sqlite3
 O diretório `data/` continua ignorado pelo Git e deve conter apenas dados locais
 do usuário.
 
+Na Fase 13, o bootstrap passa a montar `MemoryReviewService` usando essa
+configuração, permitindo que o dashboard local mostre contagens de memória.
+
+Para usar um arquivo explícito:
+
+```text
+uv run private-ai-companion --memory-config configs/memory.default.toml --dashboard
+```
+
 ## Campos atuais
 
 - `database_path`: caminho do SQLite local.

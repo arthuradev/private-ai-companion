@@ -14,7 +14,9 @@
 
 - Rich
 - Pyfiglet
-- Tray/dashboard em fase posterior
+- Dashboard local em Rich.
+- Modelo local de tray/status em Rich.
+- Tray nativo pode ser adapter opcional futuro, sem dependência obrigatória.
 
 ## LLM
 

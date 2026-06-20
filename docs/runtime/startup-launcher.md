@@ -97,6 +97,12 @@ policy de skills e execução de efeitos continuam no bootstrap Python,
 `skills/`, `safety/` e `desktop/`; o `Start.bat` não contém lógica de skill,
 não interpreta manifests e não executa efeitos diretamente.
 
+Na Fase 13, o launcher também pode repassar `--memory-config`, `--dashboard` e
+`--tray-status`. Dashboard, modelo local de tray, leitura de configuração,
+contagens de memória e permissões continuam no bootstrap Python e em `ui/`; o
+`Start.bat` não renderiza painel, não lê banco SQLite e não interpreta
+permissões.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

@@ -43,3 +43,20 @@ A CLI inicial deve usar Rich + Pyfiglet e exibir o nome `private-ai-companion` a
 - Loop de conversa por texto.
 - Comandos de saída `/exit`, `/quit`, `exit` e `quit`.
 - Modo `--once` para executar uma única mensagem e encerrar.
+
+## Implementado na Fase 13
+
+- `RichDashboardApp` para dashboard local em Rich.
+- `DashboardSnapshot` com status de runtime, configuração, memória, permissões
+  de desktop e skills.
+- `RichTrayStatusApp` para o primeiro modelo local de tray/status.
+- `TraySnapshot` com tooltip e itens de menu testáveis.
+- CLI `--dashboard` para renderizar o dashboard e encerrar.
+- CLI `--tray-status` para renderizar o status/menu de tray e encerrar.
+
+O dashboard e o tray status usam apenas a API pública de `Application`. A UI não
+importa `memory/`, `desktop/`, `skills/`, `safety/` ou `vision/` diretamente.
+
+O modelo de tray da Fase 13 é local e testável. Integração nativa com a bandeja
+do sistema deve continuar sendo uma borda de UI futura, sem regra de negócio e
+sem dependência obrigatória para o fluxo principal.

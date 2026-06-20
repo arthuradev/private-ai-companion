@@ -77,6 +77,11 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
   `--skills-config`.
 - Eventos `SkillInvoked`, `SkillDenied` e `SkillCompleted` sem input sensível.
 - Testes de segurança garantindo que skills não bypassam o pipeline de ações.
+- Dashboard local em Rich com status de runtime, configuração, memória,
+  permissões de desktop e skills.
+- Modelo local de tray/status com menu testável.
+- CLI `--dashboard`, `--tray-status` e `--memory-config`.
+- Bootstrap de memória conectado à aplicação para uso por UI e revisão local.
 
 ### Changed
 

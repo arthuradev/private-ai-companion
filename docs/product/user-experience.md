@@ -34,6 +34,11 @@ automação invisível. Quando uma skill solicitar efeito local, a interface dev
 mostrar o resultado da skill e o status de cada efeito, incluindo dry-run,
 negação ou necessidade de confirmação.
 
+O dashboard complementar deve priorizar visão operacional: runtime, configuração,
+contagens de memória, permissões, skills e status de tray. Ele não deve expor
+conteúdo privado bruto por padrão. A revisão detalhada de memória deve continuar
+dependendo de fluxo explícito de usuário.
+
 ## Proatividade
 
 A companion pode ter comportamento proativo desde o começo, mas configurável e respeitoso. Proatividade deve começar baixa e nunca envolver captura oculta de dados.

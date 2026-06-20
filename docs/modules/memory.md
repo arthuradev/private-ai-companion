@@ -17,6 +17,13 @@ Gerencia SQLite, memória curta/sessão/longa, política de memória, recuperaç
 A conversa por texto ainda não grava memórias automaticamente. Integrações com
 sumarização, recuperação semântica e UI de revisão ficam para fases futuras.
 
+## Estado na Fase 13
+
+O bootstrap monta `MemoryReviewService` a partir de `configs/memory.default.toml`
+ou de `--memory-config`. O dashboard local consulta a aplicação para obter
+contagens por status, sem importar `memory/` dentro de `ui/` e sem renderizar
+conteúdo privado bruto por padrão.
+
 ## Regras
 
 - Deve respeitar boundaries definidos em `docs/architecture/module-boundaries.md`.

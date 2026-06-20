@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 12:
+Este repositório já possui a base implementada até a Fase 13:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -57,10 +57,12 @@ Este repositório já possui a base implementada até a Fase 12:
   policy e eventos sanitizados;
 - skills embutidas `builtin.status`, `builtin.local_note` e
   `builtin.open_allowed_app`;
+- dashboard local em Rich para status, configuração, memória e permissões;
+- modelo local de tray/status com menu testável e sem dependência nativa pesada;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
-  memória, speech, avatar, visão, desktop, skills, safety, config, CLI,
-  segurança e boundaries arquiteturais.
+  memória, speech, avatar, visão, desktop, skills, dashboard/tray, safety,
+  config, CLI, segurança e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -81,6 +83,7 @@ Ordem de leitura recomendada:
 - `pydantic` para validação de configurações, eventos e schemas
 - SQLite para memória local
 - Rich + Pyfiglet para CLI inicial
+- Rich para dashboard/tray local inicial
 - faster-whisper para STT local
 - TTS por adapters, com ênfase em ElevenLabs como opção premium
 - VTube Studio + Live2D como primeiro caminho real de avatar
@@ -136,6 +139,12 @@ configs/memory.default.toml
 
 A Fase 06 implementa repository SQLite, policy e revisão de memórias. A conversa
 ainda não grava memórias automaticamente.
+
+Para usar um arquivo de memória específico:
+
+```text
+uv run private-ai-companion --memory-config configs/memory.default.toml
+```
 
 Configuração padrão de fala:
 
@@ -265,6 +274,26 @@ No Windows, o launcher continua delegando ao entrypoint oficial:
 
 ```text
 Start.bat --skill builtin.status
+```
+
+UI complementar local:
+
+```text
+uv run private-ai-companion --dashboard
+uv run private-ai-companion --tray-status
+```
+
+A Fase 13 implementa um dashboard local em Rich com status de runtime,
+configuração, contagens de memória, permissões de desktop e skills habilitadas.
+O modo `--tray-status` expõe o primeiro modelo de tray/menu em formato local e
+testável. Integração nativa com bandeja do sistema pode evoluir depois sem
+colocar regra de negócio na UI.
+
+No Windows, o launcher continua delegando:
+
+```text
+Start.bat --dashboard
+Start.bat --tray-status
 ```
 
 Validações atuais:
