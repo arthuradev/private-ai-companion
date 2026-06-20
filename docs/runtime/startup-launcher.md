@@ -103,6 +103,12 @@ contagens de memória e permissões continuam no bootstrap Python e em `ui/`; o
 `Start.bat` não renderiza painel, não lê banco SQLite e não interpreta
 permissões.
 
+Na Fase 14, o launcher também pode repassar `--observability-config` e
+`--diagnostics`. Configuração de observabilidade, health checks, métricas,
+replay de eventos sanitizado e logs estruturados continuam no bootstrap Python,
+`observability/` e `ui/`; o `Start.bat` não lê logs, não inspeciona eventos e
+não implementa regras de diagnóstico.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:

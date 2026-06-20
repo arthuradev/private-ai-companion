@@ -18,6 +18,7 @@ Um módulo só deve conhecer o que precisa conhecer. Dependências devem apontar
 | `desktop` | safety, action contracts | LLM direto |
 | `skills` | registry, safety, contracts | bypass de safety |
 | `ui` | services públicos | regra de negócio |
+| `observability` | core events, métricas, logs sanitizados | UI, adapters, providers concretos, payload privado bruto |
 
 ## Testes de arquitetura
 

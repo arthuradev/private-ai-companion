@@ -94,3 +94,20 @@ Usuário solicita dashboard ou tray status
 
 A UI complementar lê serviços públicos da aplicação e renderiza estado. Ela não
 executa actions, não acessa banco de memória diretamente e não bypassa policy.
+
+## Observabilidade e diagnóstico
+
+```text
+Módulos publicam eventos
+→ EventBus
+→ ObservabilityService
+→ sanitize_event
+→ StructuredEventLogger / EventReplayRecorder / EventMetricsCollector
+→ HealthCheckService
+→ DiagnosticsSnapshot
+→ RichDiagnosticsApp
+```
+
+Logs e replay são sanitizados antes de retenção. Texto de conversa, conteúdo
+visual, parâmetros completos de ações e segredos não entram em diagnóstico por
+padrão.

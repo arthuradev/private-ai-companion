@@ -82,6 +82,13 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - Modelo local de tray/status com menu testável.
 - CLI `--dashboard`, `--tray-status` e `--memory-config`.
 - Bootstrap de memória conectado à aplicação para uso por UI e revisão local.
+- Observabilidade local com logs estruturados em memória, métricas de eventos,
+  replay sanitizado e health checks.
+- Configuração versionável de observabilidade em
+  `configs/observability.default.toml`.
+- CLI `--diagnostics` e `--observability-config`.
+- Teste de segurança garantindo que observabilidade não retém texto privado de
+  turnos.
 
 ### Changed
 

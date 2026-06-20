@@ -22,7 +22,11 @@
 9. TTS queue interruption.
 10. Avatar state mapping.
 11. Dashboard/tray snapshots sem dados sensíveis.
+12. Observability redaction em replay de eventos e logs estruturados.
+13. Health checks locais sem dependência de providers externos.
 
 ## Regra
 
 Módulos de segurança devem ter testes antes ou junto da implementação.
+Fluxos de observabilidade devem provar que payloads privados não aparecem por
+padrão em logs, snapshots ou replay de eventos.

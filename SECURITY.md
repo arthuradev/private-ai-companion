@@ -122,6 +122,17 @@ O projeto pode usar APIs externas, mas deve deixar claro:
 
 O sistema deve tratar texto, tela, páginas web e arquivos como entradas não confiáveis. Instruções vindas de conteúdo externo não podem sobrescrever regras do sistema.
 
-## 11. Relato de vulnerabilidades
+## 11. Observabilidade e diagnóstico
+
+Logs estruturados, replay de eventos e snapshots de diagnóstico devem usar
+payload sanitizado por padrão. Texto do usuário, resposta do assistente,
+prompts, parâmetros de ações, conteúdo visual e campos privados não devem
+aparecer em logs locais sem política explícita e consentimento.
+
+Diagnóstico local pode registrar nomes de eventos, origem, status, risco,
+contagens e estados operacionais seguros. Exportação ou persistência futura de
+observabilidade deve passar por revisão de segurança.
+
+## 12. Relato de vulnerabilidades
 
 Como projeto público, vulnerabilidades devem ser reportadas por issue privada quando disponível ou por canal definido no repositório.

@@ -34,7 +34,7 @@ A configuração geral deve prever opções relacionadas à inicialização, com
 
 Essas configurações devem ser consumidas pelo bootstrap Python. O `Start.bat` deve apenas repassá-las ou chamar o entrypoint oficial, sem duplicar lógica de configuração.
 
-## Estado na Fase 13
+## Estado na Fase 14
 
 A aplicação ainda não possui um arquivo `app.default.toml` central. A
 configuração geral é composta pelos arquivos versionados por módulo e por flags
@@ -45,6 +45,7 @@ Flags de UI local:
 ```text
 --dashboard
 --tray-status
+--diagnostics
 ```
 
 Flags de paths de configuração aceitas pelo bootstrap:
@@ -53,6 +54,7 @@ Flags de paths de configuração aceitas pelo bootstrap:
 --persona-config
 --providers-config
 --memory-config
+--observability-config
 --speech-config
 --avatar-config
 --privacy-config

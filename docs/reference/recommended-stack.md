@@ -16,7 +16,18 @@
 - Pyfiglet
 - Dashboard local em Rich.
 - Modelo local de tray/status em Rich.
+- Tela local de diagnóstico em Rich.
 - Tray nativo pode ser adapter opcional futuro, sem dependência obrigatória.
+
+## Observabilidade
+
+- Logs estruturados em memória com payload sanitizado.
+- Replay de eventos local, limitado por retenção e sem texto privado por
+  padrão.
+- Métricas simples de eventos por nome, origem e sensibilidade.
+- Health checks locais e determinísticos.
+- Persistência/exportação de diagnóstico deve ser opt-in futura, com policy e
+  redaction explícitas.
 
 ## LLM
 

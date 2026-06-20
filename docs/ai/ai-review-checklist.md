@@ -15,6 +15,7 @@ Use este checklist antes de encerrar uma fase.
 - [ ] Nenhum segredo foi versionado.
 - [ ] Ações locais passam por `safety/`.
 - [ ] Dados sensíveis são redigidos em logs.
+- [ ] Observabilidade não expõe texto, prompts, screenshots ou parâmetros privados.
 - [ ] Screenshot/vision respeitam policy.
 - [ ] Memória permanente respeita policy.
 

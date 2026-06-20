@@ -60,3 +60,14 @@ importa `memory/`, `desktop/`, `skills/`, `safety/` ou `vision/` diretamente.
 O modelo de tray da Fase 13 é local e testável. Integração nativa com a bandeja
 do sistema deve continuar sendo uma borda de UI futura, sem regra de negócio e
 sem dependência obrigatória para o fluxo principal.
+
+## Implementado na Fase 14
+
+- `RichDiagnosticsApp` para renderizar diagnóstico local em Rich.
+- Visualização de health checks, métricas de eventos, replay sanitizado e logs
+  estruturados sanitizados.
+- CLI `--diagnostics` para renderizar o snapshot de diagnóstico e encerrar.
+
+A tela de diagnóstico usa apenas a API pública de `Application`. A UI não
+acessa eventos brutos, não lê logs persistentes e não decide política de
+redaction.

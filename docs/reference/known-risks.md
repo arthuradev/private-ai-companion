@@ -12,6 +12,7 @@
 
 - Prompt injection.
 - Logs com dados sensíveis.
+- Replay de eventos ou diagnóstico expondo payload privado.
 - Memória permanente ruim.
 - Screenshots enviados indevidamente.
 - Skills burlando policy.
@@ -29,6 +30,7 @@
 - Boundaries.
 - Tests.
 - Safety policy.
+- Redaction determinística em observabilidade.
 - ADRs.
 - Phase gates.
 - Revisão contínua.

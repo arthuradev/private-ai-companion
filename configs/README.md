@@ -15,3 +15,4 @@ Current versioned examples:
 - `privacy.default.toml`
 - `desktop.default.toml`
 - `skills.default.toml`
+- `observability.default.toml`

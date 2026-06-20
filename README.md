@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 13:
+Este repositório já possui a base implementada até a Fase 14:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -59,10 +59,12 @@ Este repositório já possui a base implementada até a Fase 13:
   `builtin.open_allowed_app`;
 - dashboard local em Rich para status, configuração, memória e permissões;
 - modelo local de tray/status com menu testável e sem dependência nativa pesada;
+- observabilidade local com logs estruturados em memória, métricas de eventos,
+  replay sanitizado e health checks;
 - `Start.bat` inicial para usuários Windows;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
   memória, speech, avatar, visão, desktop, skills, dashboard/tray, safety,
-  config, CLI, segurança e boundaries arquiteturais.
+  observabilidade, config, CLI, segurança e boundaries arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -84,6 +86,7 @@ Ordem de leitura recomendada:
 - SQLite para memória local
 - Rich + Pyfiglet para CLI inicial
 - Rich para dashboard/tray local inicial
+- logs estruturados, métricas e replay em memória por padrão
 - faster-whisper para STT local
 - TTS por adapters, com ênfase em ElevenLabs como opção premium
 - VTube Studio + Live2D como primeiro caminho real de avatar
@@ -294,6 +297,28 @@ No Windows, o launcher continua delegando:
 ```text
 Start.bat --dashboard
 Start.bat --tray-status
+```
+
+Configuração padrão de observabilidade:
+
+```text
+configs/observability.default.toml
+```
+
+A Fase 14 implementa logs estruturados em memória, métricas de eventos, replay
+sanitizado e health checks. Payloads privados, como texto do usuário e resposta
+gerada, são redigidos por padrão.
+
+Para validar diagnóstico local:
+
+```text
+uv run private-ai-companion --diagnostics
+```
+
+No Windows, o launcher continua delegando:
+
+```text
+Start.bat --diagnostics
 ```
 
 Validações atuais:

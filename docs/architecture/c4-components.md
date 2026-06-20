@@ -50,3 +50,12 @@
 - `DashboardSnapshot`
 - `RichTrayStatusApp`
 - `TraySnapshot`
+
+## Observability
+
+- `ObservabilityService`
+- `StructuredEventLogger`
+- `EventReplayRecorder`
+- `EventMetricsCollector`
+- `HealthCheckService`
+- `DiagnosticsSnapshot`
