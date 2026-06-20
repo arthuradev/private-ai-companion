@@ -89,6 +89,12 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 - CLI `--diagnostics` e `--observability-config`.
 - Teste de segurança garantindo que observabilidade não retém texto privado de
   turnos.
+- `Start.bat` robustecido com logs de startup, detecção de `.env`, validação de
+  Python 3.12+ e execução via `uv run --locked`.
+- Script `scripts/release-check.ps1` para validações de release, build e launcher.
+- Testes de contrato para launcher Windows, release-check e metadata do pacote.
+- Release candidate Python `0.3.0rc1`, correspondente à tag SemVer
+  `v0.3.0-rc.1`.
 
 ### Changed
 
@@ -97,6 +103,11 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
 ### Fixed
 
 - Nenhuma correção ainda.
+
+## Release candidate atual
+
+- `0.3.0rc1` / `v0.3.0-rc.1`: empacotamento, setup e validação de launcher da
+  Fase 15. A release estável deve aguardar a auditoria final da Fase 16.
 
 ## Versionamento planejado
 

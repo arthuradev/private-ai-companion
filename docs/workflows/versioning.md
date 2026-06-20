@@ -6,12 +6,26 @@ O projeto usa SemVer.
 MAJOR.MINOR.PATCH
 ```
 
+O pacote Python usa versões PEP 440 em `pyproject.toml` e
+`src/private_ai_companion/__init__.py`. Quando houver release candidate, a versão
+Python deve ser convertida para tag SemVer:
+
+```text
+0.3.0rc1 → v0.3.0-rc.1
+```
+
 ## Planejamento
 
 - `v0.1.0`: primeira versão funcional com conversa, voz, memória e avatar.
 - `v0.2.0`: visão, desktop actions seguras e skills.
 - `v0.3.0`: dashboard/tray, empacotamento e hardening.
 - `v1.0.0`: release estável.
+
+## Estado atual
+
+- Pacote Python: `0.3.0rc1`.
+- Tag SemVer planejada para a Fase 15: `v0.3.0-rc.1`.
+- Release estável bloqueada até a auditoria final da Fase 16.
 
 ## Tags
 

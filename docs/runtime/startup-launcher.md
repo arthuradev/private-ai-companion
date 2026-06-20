@@ -109,6 +109,14 @@ replay de eventos sanitizado e logs estruturados continuam no bootstrap Python,
 `observability/` e `ui/`; o `Start.bat` não lê logs, não inspeciona eventos e
 não implementa regras de diagnóstico.
 
+Na Fase 15, o launcher passa a registrar mensagens de startup em
+`logs/startup.log`, aceitar Python 3.12 ou superior via Windows `py` launcher,
+avisar quando `.env` não existe e executar `uv run --locked
+private-ai-companion`. O `uv` continua responsável por sincronizar dependências
+a partir do lockfile quando necessário. O launcher não registra argumentos de
+linha de comando, para evitar gravar texto privado passado por flags como
+`--once`.
+
 ## Responsabilidades que não pertencem ao `Start.bat`
 
 O `Start.bat` não deve:
@@ -175,6 +183,14 @@ Start.bat --diagnostics
 ```
 
 ou alternativa equivalente documentada, desde que preserve simplicidade para usuário final.
+
+### Release check
+
+```text
+powershell -ExecutionPolicy Bypass -File scripts/release-check.ps1
+```
+
+Esse fluxo é para mantenedores. Usuários finais continuam usando `Start.bat`.
 
 ## Critérios de qualidade
 
