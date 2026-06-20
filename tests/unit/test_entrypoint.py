@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from private_ai_companion import PROJECT_NAME, __version__
 from private_ai_companion.__main__ import main
 
 
@@ -19,7 +20,7 @@ def test_entrypoint_single_turn_returns_success(
 def test_entrypoint_version_returns_success(capsys: pytest.CaptureFixture[str]) -> None:
     assert main(("--version",)) == 0
     captured = capsys.readouterr()
-    assert "private-ai-companion 0.0.0" in captured.out
+    assert f"{PROJECT_NAME} {__version__}" in captured.out
 
 
 def test_entrypoint_voice_file_returns_success(
