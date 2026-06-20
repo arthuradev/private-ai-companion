@@ -158,3 +158,18 @@ def test_cli_tray_status_renders_menu() -> None:
     assert exit_code == 0
     assert "Tray status" in output
     assert "Abrir dashboard" in output
+
+
+def test_cli_diagnostics_renders_health_metrics_and_replay() -> None:
+    console = Console(record=True, width=140, force_terminal=False)
+    cli = RichCliApp(application=create_application(), console=console)
+
+    exit_code = asyncio.run(cli.run_diagnostics())
+    output = console.export_text()
+
+    assert exit_code == 0
+    assert "Diagnostico local" in output
+    assert "Health checks" in output
+    assert "Metricas de eventos" in output
+    assert "Replay sanitizado" in output
+    assert "Logs estruturados" in output

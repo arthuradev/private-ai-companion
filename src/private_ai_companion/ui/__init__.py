@@ -6,6 +6,10 @@ from private_ai_companion.ui.dashboard import (
     StatusCount,
     build_dashboard_snapshot,
 )
+from private_ai_companion.ui.diagnostics import (
+    RichDiagnosticsApp,
+    RichDiagnosticsRenderer,
+)
 from private_ai_companion.ui.tray import (
     RichTrayStatusApp,
     RichTrayStatusRenderer,
@@ -20,6 +24,8 @@ __all__ = [
     "RichCliApp",
     "RichDashboardApp",
     "RichDashboardRenderer",
+    "RichDiagnosticsApp",
+    "RichDiagnosticsRenderer",
     "RichTrayStatusApp",
     "RichTrayStatusRenderer",
     "StatusCount",

@@ -29,8 +29,12 @@ def test_create_application_wires_core_runtime() -> None:
     )
 
     snapshot = asyncio.run(application.run_once())
+    diagnostics = application.diagnostics_snapshot()
 
     assert snapshot.state.phase is RuntimePhase.STOPPED
+    assert diagnostics.metrics.events_by_name["AppStarted"] == 1
+    assert diagnostics.metrics.events_by_name["AppStopped"] == 1
+    assert diagnostics.health.status.value in {"pass", "warn"}
 
 
 def test_application_handles_explicit_voice_file(tmp_path: Path) -> None:

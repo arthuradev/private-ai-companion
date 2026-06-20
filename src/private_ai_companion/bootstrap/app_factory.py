@@ -38,12 +38,14 @@ from private_ai_companion.config import (
     DesktopConfig,
     LLMProviderConfig,
     MemoryConfig,
+    ObservabilityConfig,
     PrivacyConfig,
     SkillsConfig,
     SpeechConfig,
     load_avatar_config,
     load_desktop_config,
     load_memory_config,
+    load_observability_config,
     load_persona_profile,
     load_privacy_config,
     load_providers_config,
@@ -53,7 +55,7 @@ from private_ai_companion.config import (
 from private_ai_companion.core.event_bus import EventBus
 from private_ai_companion.core.lifecycle import ApplicationIdentity
 from private_ai_companion.core.orchestrator import CoreOrchestrator
-from private_ai_companion.core.runtime_state import RuntimeStateStore
+from private_ai_companion.core.runtime_state import RuntimePhase, RuntimeStateStore
 from private_ai_companion.desktop import (
     DesktopActionExecutor,
     DesktopActionService,
@@ -66,7 +68,22 @@ from private_ai_companion.interaction import (
 from private_ai_companion.memory import (
     MemoryPolicy,
     MemoryReviewService,
+    MemoryStatus,
     SQLiteMemoryRepository,
+)
+from private_ai_companion.observability import (
+    ComponentHealthCheck,
+    EventMetricsCollector,
+    EventReplayRecorder,
+    HealthCheckResult,
+    HealthCheckService,
+    InMemoryStructuredLogSink,
+    JsonScalar,
+    ObservabilityService,
+    StructuredEventLogger,
+    fail_check,
+    pass_check,
+    warn_check,
 )
 from private_ai_companion.safety import (
     ActionPolicy,
@@ -107,11 +124,23 @@ class ApplicationConfigPaths:
     persona: Path | None = None
     providers: Path | None = None
     memory: Path | None = None
+    observability: Path | None = None
     speech: Path | None = None
     avatar: Path | None = None
     privacy: Path | None = None
     desktop: Path | None = None
     skills: Path | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class HealthCheckDependencies:
+    orchestrator: CoreOrchestrator
+    llm_router: LLMRouter
+    memory_review: MemoryReviewService
+    avatar: AvatarService
+    vision: VisionService
+    desktop_actions: DesktopActionService
+    skills: SkillManager
 
 
 def create_application(
@@ -121,7 +150,10 @@ def create_application(
     config_paths: ApplicationConfigPaths | None = None,
 ) -> Application:
     paths = config_paths or ApplicationConfigPaths()
+    observability_config = load_observability_config(paths.observability)
     event_bus = EventBus()
+    observability = _build_observability_service(observability_config)
+    observability.subscribe_to(event_bus)
     state_store = RuntimeStateStore()
     persona = load_persona_profile(paths.persona)
     providers_config = load_providers_config(paths.providers)
@@ -200,6 +232,18 @@ def create_application(
         policy=_build_skill_policy(skills_config),
         effect_executor=DesktopSkillEffectExecutor(desktop_actions=desktop_actions),
     )
+    health_checks = _build_health_check_service(
+        observability_config=observability_config,
+        dependencies=HealthCheckDependencies(
+            orchestrator=orchestrator,
+            llm_router=llm_router,
+            memory_review=memory_review,
+            avatar=avatar,
+            vision=vision,
+            desktop_actions=desktop_actions,
+            skills=skills,
+        ),
+    )
     return Application(
         orchestrator=orchestrator,
         text_interaction=text_interaction,
@@ -212,6 +256,8 @@ def create_application(
         desktop_actions=desktop_actions,
         memory_review=memory_review,
         skills=skills,
+        observability=observability,
+        health_checks=health_checks,
     )
 
 
@@ -247,6 +293,133 @@ def _build_memory_review_service(memory_config: MemoryConfig) -> MemoryReviewSer
             auto_approve_low_sensitivity=(memory_config.auto_approve_low_sensitivity),
             minimum_confidence=memory_config.policy.minimum_confidence,
         ),
+    )
+
+
+def _build_observability_service(
+    observability_config: ObservabilityConfig,
+) -> ObservabilityService:
+    log_sink = InMemoryStructuredLogSink(
+        max_records=observability_config.max_log_records,
+    )
+    return ObservabilityService(
+        enabled=observability_config.enabled,
+        metrics=EventMetricsCollector(enabled=observability_config.metrics_enabled),
+        replay_recorder=EventReplayRecorder(
+            max_records=observability_config.max_replay_events,
+            enabled=observability_config.event_replay_enabled,
+        ),
+        structured_logger=StructuredEventLogger(
+            sink=log_sink,
+            enabled=observability_config.structured_logging_enabled,
+        ),
+        log_sink=log_sink,
+    )
+
+
+def _build_health_check_service(
+    *,
+    observability_config: ObservabilityConfig,
+    dependencies: HealthCheckDependencies,
+) -> HealthCheckService:
+    return HealthCheckService(
+        enabled=observability_config.health_checks_enabled,
+        checks=(
+            ComponentHealthCheck(
+                component_id="runtime",
+                check=lambda: _runtime_health(dependencies.orchestrator),
+            ),
+            ComponentHealthCheck(
+                component_id="llm",
+                check=lambda: _registered_values_health(
+                    component_id="llm",
+                    values=dependencies.llm_router.provider_ids,
+                    label="providers",
+                ),
+            ),
+            ComponentHealthCheck(
+                component_id="memory",
+                check=lambda: _memory_health(dependencies.memory_review),
+            ),
+            ComponentHealthCheck(
+                component_id="avatar",
+                check=lambda: pass_check(
+                    "avatar",
+                    "provider_registered",
+                    details={"provider_id": dependencies.avatar.provider_id},
+                ),
+            ),
+            ComponentHealthCheck(
+                component_id="vision",
+                check=lambda: pass_check(
+                    "vision",
+                    "providers_registered",
+                    details={
+                        "capture_provider_id": (
+                            dependencies.vision.capture_provider_id
+                        ),
+                        "vision_provider_id": dependencies.vision.vision_provider_id,
+                    },
+                ),
+            ),
+            ComponentHealthCheck(
+                component_id="desktop",
+                check=lambda: pass_check(
+                    "desktop",
+                    "executor_registered",
+                    details={"executor_id": dependencies.desktop_actions.executor_id},
+                ),
+            ),
+            ComponentHealthCheck(
+                component_id="skills",
+                check=lambda: _registered_values_health(
+                    component_id="skills",
+                    values=dependencies.skills.skill_ids,
+                    label="registered_skills",
+                ),
+            ),
+        ),
+    )
+
+
+def _runtime_health(orchestrator: CoreOrchestrator) -> HealthCheckResult:
+    phase = orchestrator.state.phase
+    details: dict[str, JsonScalar] = {"phase": phase.value}
+    if phase is RuntimePhase.FAILED:
+        return fail_check("runtime", "runtime_failed", details=details)
+    if phase is RuntimePhase.RUNNING:
+        return pass_check("runtime", "runtime_running", details=details)
+    return warn_check("runtime", "runtime_not_running", details=details)
+
+
+def _registered_values_health(
+    *,
+    component_id: str,
+    values: tuple[str, ...],
+    label: str,
+) -> HealthCheckResult:
+    details: dict[str, JsonScalar] = {f"{label}_count": len(values)}
+    if not values:
+        return fail_check(component_id, f"no_{label}", details=details)
+    return pass_check(component_id, f"{label}_registered", details=details)
+
+
+def _memory_health(memory_review: MemoryReviewService) -> HealthCheckResult:
+    try:
+        counts = {
+            status.value: len(memory_review.repository.list_by_status(status))
+            for status in MemoryStatus
+        }
+    except Exception as error:
+        return fail_check(
+            "memory",
+            "memory_repository_unavailable",
+            details={"error_type": type(error).__name__},
+        )
+    return pass_check(
+        "memory",
+        "memory_repository_available",
+        details={"status_count": len(counts)},
     )
 
 

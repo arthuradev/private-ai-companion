@@ -121,6 +121,19 @@ FORBIDDEN_SKILLS_IMPORT_PREFIXES = (
     "private_ai_companion.vision",
 )
 
+FORBIDDEN_OBSERVABILITY_IMPORT_PREFIXES = (
+    "private_ai_companion.adapters",
+    "private_ai_companion.avatar",
+    "private_ai_companion.brain",
+    "private_ai_companion.desktop",
+    "private_ai_companion.memory",
+    "private_ai_companion.safety",
+    "private_ai_companion.skills",
+    "private_ai_companion.speech",
+    "private_ai_companion.ui",
+    "private_ai_companion.vision",
+)
+
 
 def imported_modules(path: Path) -> set[str]:
     modules: set[str] = set()
@@ -229,6 +242,15 @@ def test_skills_do_not_import_runtime_edges_or_desktop() -> None:
     violations = forbidden_imports_under(
         PACKAGE_ROOT / "skills",
         FORBIDDEN_SKILLS_IMPORT_PREFIXES,
+    )
+
+    assert violations == {}
+
+
+def test_observability_observes_core_without_runtime_edges() -> None:
+    violations = forbidden_imports_under(
+        PACKAGE_ROOT / "observability",
+        FORBIDDEN_OBSERVABILITY_IMPORT_PREFIXES,
     )
 
     assert violations == {}

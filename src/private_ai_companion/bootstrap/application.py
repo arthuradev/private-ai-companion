@@ -22,6 +22,12 @@ from private_ai_companion.interaction import (
     VoiceTurn,
 )
 from private_ai_companion.memory import MemoryReviewService, MemoryStatus
+from private_ai_companion.observability import (
+    DiagnosticsSnapshot,
+    HealthCheckService,
+    HealthReport,
+    ObservabilityService,
+)
 from private_ai_companion.skills import SkillManager, SkillRequest, SkillRunResult
 from private_ai_companion.speech import SpeechInputAudio, SpeechQueueService
 from private_ai_companion.vision import (
@@ -44,6 +50,8 @@ class Application:
     desktop_actions: DesktopActionService
     memory_review: MemoryReviewService
     skills: SkillManager
+    observability: ObservabilityService
+    health_checks: HealthCheckService
 
     async def start(self) -> RuntimeSnapshot:
         return await self.orchestrator.start()
@@ -134,3 +142,9 @@ class Application:
             status.value: len(self.memory_review.repository.list_by_status(status))
             for status in MemoryStatus
         }
+
+    def run_health_checks(self) -> HealthReport:
+        return self.health_checks.run()
+
+    def diagnostics_snapshot(self) -> DiagnosticsSnapshot:
+        return self.observability.diagnostics(self.health_checks)

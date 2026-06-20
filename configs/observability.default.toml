@@ -1,0 +1,8 @@
+[observability]
+enabled = true
+structured_logging_enabled = true
+max_log_records = 500
+event_replay_enabled = true
+max_replay_events = 500
+metrics_enabled = true
+health_checks_enabled = true

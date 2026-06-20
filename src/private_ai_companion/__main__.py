@@ -53,6 +53,11 @@ def build_parser() -> ArgumentParser:
         help="path to a memory TOML config file",
     )
     parser.add_argument(
+        "--observability-config",
+        type=Path,
+        help="path to an observability TOML config file",
+    )
+    parser.add_argument(
         "--speech-config",
         type=Path,
         help="path to a speech TOML config file",
@@ -150,6 +155,11 @@ def build_parser() -> ArgumentParser:
         action="store_true",
         help="show the local tray status model and exit",
     )
+    parser.add_argument(
+        "--diagnostics",
+        action="store_true",
+        help="show local health checks, metrics and sanitized event replay",
+    )
     return parser
 
 
@@ -171,12 +181,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             options.skill is not None,
             bool(options.dashboard),
             bool(options.tray_status),
+            bool(options.diagnostics),
         )
     )
     if single_action_count > 1:
         parser.error(
             "--once, --voice-file, --avatar-expression, --screen-context, "
-            "--desktop-action, --skill, --dashboard and --tray-status are exclusive"
+            "--desktop-action, --skill, --dashboard, --tray-status and "
+            "--diagnostics are exclusive"
         )
 
     if options.desktop_action == "create-note" and not options.note_title:
@@ -198,6 +210,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 persona=options.persona_config,
                 providers=options.providers_config,
                 memory=options.memory_config,
+                observability=options.observability_config,
                 speech=options.speech_config,
                 avatar=options.avatar_config,
                 privacy=options.privacy_config,
@@ -218,7 +231,7 @@ def _run_cli_action(
         return _run_interaction_action(cli, options)
     if options.desktop_action is not None or options.skill is not None:
         return _run_tool_action(cli, options, skill_input)
-    if options.dashboard or options.tray_status:
+    if options.dashboard or options.tray_status or options.diagnostics:
         return _run_local_ui_action(cli, options)
 
     return asyncio.run(cli.run_interactive())
@@ -286,6 +299,8 @@ def _run_local_ui_action(cli: RichCliApp, options: Namespace) -> int:
         return asyncio.run(cli.run_dashboard())
     if options.tray_status:
         return asyncio.run(cli.run_tray_status())
+    if options.diagnostics:
+        return asyncio.run(cli.run_diagnostics())
     raise ValueError("expected local UI option")
 
 

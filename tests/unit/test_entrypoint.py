@@ -137,6 +137,16 @@ def test_entrypoint_tray_status_returns_success(
     assert "Abrir dashboard" in captured.out
 
 
+def test_entrypoint_diagnostics_returns_success(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(("--diagnostics",)) == 0
+
+    captured = capsys.readouterr()
+    assert "Diagnostico local" in captured.out
+    assert "Health checks" in captured.out
+
+
 def test_entrypoint_rejects_multiple_single_actions(tmp_path: Path) -> None:
     voice_file = tmp_path / "voice.txt"
     voice_file.write_text("hello voice", encoding="utf-8")
@@ -178,6 +188,13 @@ def test_entrypoint_rejects_text_and_skill_together() -> None:
 def test_entrypoint_rejects_text_and_dashboard_together() -> None:
     with pytest.raises(SystemExit) as error:
         main(("--once", "hello", "--dashboard"))
+
+    assert error.value.code == 2
+
+
+def test_entrypoint_rejects_text_and_diagnostics_together() -> None:
+    with pytest.raises(SystemExit) as error:
+        main(("--once", "hello", "--diagnostics"))
 
     assert error.value.code == 2
 
