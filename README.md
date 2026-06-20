@@ -30,7 +30,7 @@ Criar uma base técnica robusta para uma personagem virtual privada que possa:
 
 ## Estado atual
 
-Este repositório já possui a base implementada até a Fase 15:
+Este repositório já possui a base implementada até a Fase 16:
 
 - projeto Python 3.12+ com `src/`;
 - `uv`, `ruff`, `pytest` e `pyright` configurados;
@@ -64,9 +64,12 @@ Este repositório já possui a base implementada até a Fase 15:
 - `Start.bat` robustecido para usuários Windows, com validação de ambiente,
   logs de startup e delegação para o entrypoint oficial;
 - empacotamento Python validável por `uv build` e script de release-check;
+- auditoria final automatizada para segredos, artefatos privados, boundaries,
+  release e launcher;
 - testes de sanidade, runtime, interação por texto/voz, prompt, LLM router,
   memória, speech, avatar, visão, desktop, skills, dashboard/tray, safety,
-  observabilidade, launcher, config, CLI, segurança e boundaries arquiteturais.
+  observabilidade, launcher, config, CLI, segurança, hardening e boundaries
+  arquiteturais.
 
 Ordem de leitura recomendada:
 
@@ -341,9 +344,13 @@ Para mantenedores, a Fase 15 adiciona um helper de release local:
 powershell -ExecutionPolicy Bypass -File scripts/release-check.ps1
 ```
 
-O pacote Python está em `0.3.0rc1`. A tag SemVer correspondente para este release
-candidate é `v0.3.0-rc.1`; a release estável deve esperar o hardening final da
-Fase 16.
+Para a auditoria final da Fase 16:
+
+```text
+powershell -ExecutionPolicy Bypass -File scripts/final-audit.ps1
+```
+
+O pacote Python está em `0.3.0`. A tag SemVer estável correspondente é `v0.3.0`.
 
 ## Documentação principal
 
@@ -365,7 +372,7 @@ Apache License 2.0. Consulte `LICENSE.md`.
 
 O projeto mantém um fluxo amigável de inicialização no Windows. O usuário final não deve ser obrigado a conhecer comandos técnicos para abrir a companion.
 
-Na Fase 15, o caminho recomendado é:
+Na Fase 16, o caminho recomendado é:
 
 ```text
 Start.bat

@@ -35,6 +35,15 @@ Esse helper roda lint, formatação, testes e typecheck com `uv run --locked`,
 executa build e valida o caminho `Start.bat --diagnostics`. Ele não substitui
 revisão humana, auditoria de segurança ou criação da release no GitHub.
 
+Para hardening final:
+
+```text
+powershell -ExecutionPolicy Bypass -File scripts/final-audit.ps1
+```
+
+Esse wrapper executa o release-check, `git diff --check` e bloqueia arquivos
+privados, artefatos runtime/build e prompts operacionais duplicados versionados.
+
 ## Versão e tag
 
 Versão Python deve seguir PEP 440. Tags públicas devem seguir SemVer.
@@ -46,7 +55,12 @@ Python package: 0.3.0rc1
 Git tag: v0.3.0-rc.1
 ```
 
-A release estável deve aguardar hardening final e auditoria completa.
+Release estável da Fase 16:
+
+```text
+Python package: 0.3.0
+Git tag: v0.3.0
+```
 
 ## Validação de launcher
 

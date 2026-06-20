@@ -5,6 +5,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parents[2]
 START_BAT = REPO_ROOT / "Start.bat"
 RELEASE_CHECK = REPO_ROOT / "scripts" / "release-check.ps1"
+FINAL_AUDIT = REPO_ROOT / "scripts" / "final-audit.ps1"
 
 
 def test_start_bat_delegates_to_locked_official_entrypoint() -> None:
@@ -50,9 +51,22 @@ def test_start_bat_has_no_product_or_dangerous_logic() -> None:
 def test_release_check_runs_quality_build_and_launcher_validation() -> None:
     release_check = RELEASE_CHECK.read_text(encoding="utf-8")
 
+    assert "function Invoke-Checked" in release_check
     assert "uv run --locked ruff format --check" in release_check
     assert "uv run --locked ruff check" in release_check
     assert "uv run --locked pytest" in release_check
     assert "uv run --locked pyright" in release_check
     assert "uv build --sdist --wheel" in release_check
     assert "cmd /c Start.bat --diagnostics" in release_check
+
+
+def test_final_audit_wraps_release_and_repository_hardening() -> None:
+    final_audit = FINAL_AUDIT.read_text(encoding="utf-8")
+
+    assert "function Invoke-Checked" in final_audit
+    assert "scripts\\release-check.ps1" in final_audit
+    assert "git diff --check" in final_audit
+    assert "git ls-files" in final_audit
+    assert "PROMPT-CODEX.md" in final_audit
+    assert "call :log %\\*" in final_audit
+    assert "echo %\\*" in final_audit

@@ -23,9 +23,9 @@ Python deve ser convertida para tag SemVer:
 
 ## Estado atual
 
-- Pacote Python: `0.3.0rc1`.
-- Tag SemVer planejada para a Fase 15: `v0.3.0-rc.1`.
-- Release estável bloqueada até a auditoria final da Fase 16.
+- Pacote Python: `0.3.0`.
+- Tag SemVer estável da Fase 16: `v0.3.0`.
+- Release candidate anterior preservado como `v0.3.0-rc.1`.
 
 ## Tags
 

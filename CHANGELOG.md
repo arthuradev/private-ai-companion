@@ -93,21 +93,26 @@ Este projeto segue o espírito do Keep a Changelog e usa versionamento SemVer.
   Python 3.12+ e execução via `uv run --locked`.
 - Script `scripts/release-check.ps1` para validações de release, build e launcher.
 - Testes de contrato para launcher Windows, release-check e metadata do pacote.
-- Release candidate Python `0.3.0rc1`, correspondente à tag SemVer
-  `v0.3.0-rc.1`.
+- Script `scripts/final-audit.ps1` para hardening final, release-check, diff
+  check e auditoria de artefatos privados.
+- Testes finais de hardening para bloquear prompt operacional duplicado,
+  artefatos runtime/build versionados, arquivos de segredo, dependências de
+  streaming e logging de argumentos pelo launcher.
+- Release estável Python `0.3.0`, correspondente à tag SemVer `v0.3.0`.
 
 ### Changed
 
-- Nenhuma mudança ainda.
+- Removido `PROMPT-CODEX.md`, mantendo `AGENTS.md` e a documentação versionada
+  como fonte de verdade para agentes.
 
 ### Fixed
 
 - Nenhuma correção ainda.
 
-## Release candidate atual
+## Release atual
 
-- `0.3.0rc1` / `v0.3.0-rc.1`: empacotamento, setup e validação de launcher da
-  Fase 15. A release estável deve aguardar a auditoria final da Fase 16.
+- `0.3.0` / `v0.3.0`: dashboard/tray, observabilidade, empacotamento,
+  release-check, launcher Windows robustecido e auditoria final da Fase 16.
 
 ## Versionamento planejado
 
